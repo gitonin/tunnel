@@ -13,108 +13,81 @@
     overflow: hidden;
     background: #0a0a0f;
     touch-action: none;
-    -webkit-user-select: none;
-    user-select: none;
+    -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: none;
   }
-  /* fluid (metaball) layer — gooey GPU filter fuses overlapping blobs */
+  /* fluid (metaball) layer — finer, smoother gooey filter */
   #fluid {
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     width: 100%; height: 100%;
     display: block;
-    filter: blur(8px) contrast(16) saturate(1.25);
-    -webkit-filter: blur(8px) contrast(16) saturate(1.25);
+    filter: blur(5px) contrast(11) saturate(1.15);
+    -webkit-filter: blur(5px) contrast(11) saturate(1.15);
   }
-  /* sharp effects layer — particles, trails, shapes, flashes */
-  #fx {
-    position: fixed;
-    inset: 0;
-    display: block;
-  }
-  /* scanline texture on top, very faint */
+  #fx { position: fixed; inset: 0; display: block; }
   #scan {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 5;
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
     background: repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,0.035) 0px,
-      rgba(255,255,255,0.035) 1px,
-      rgba(0,0,0,0) 1px,
-      rgba(0,0,0,0) 3px
-    );
+      0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+      rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px);
   }
   #hud {
-    position: fixed;
-    top: 8px; right: 8px;
+    position: fixed; top: 8px; right: 8px;
     font-family: "Courier New", Courier, monospace;
-    font-size: 12px; line-height: 1.5;
-    color: #aef;
-    background: rgba(10, 10, 20, 0.55);
-    border: 1px solid rgba(120, 200, 255, 0.25);
-    border-radius: 6px;
-    padding: 6px 9px;
-    z-index: 10;
+    font-size: 12px; line-height: 1.5; color: #aef;
+    background: rgba(10,10,20,0.55);
+    border: 1px solid rgba(120,200,255,0.25);
+    border-radius: 6px; padding: 6px 9px; z-index: 10;
     text-shadow: 0 0 4px rgba(120,200,255,0.6);
   }
   #hud .row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-  #beatDot {
-    display: inline-block;
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #2a3a4a;
-  }
+  #beatDot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2a3a4a; }
   #beatDot.on { background: #6ff; box-shadow: 0 0 8px #6ff; }
   #muteBtn {
-    font-family: inherit; font-size: 12px;
-    color: #aef;
-    background: rgba(120, 200, 255, 0.12);
-    border: 1px solid rgba(120, 200, 255, 0.3);
-    border-radius: 4px;
-    padding: 2px 7px; margin-top: 3px;
-    cursor: pointer;
+    font-family: inherit; font-size: 12px; color: #aef;
+    background: rgba(120,200,255,0.12); border: 1px solid rgba(120,200,255,0.3);
+    border-radius: 4px; padding: 2px 7px; margin-top: 3px; cursor: pointer;
   }
   #muteBtn.muted { color: #f88; border-color: rgba(255,120,120,0.4); }
-  #hint {
-    position: fixed;
-    bottom: 14px; left: 0; right: 0;
-    text-align: center;
+  /* control bar (bottom-left) */
+  #ctrl {
+    position: fixed; left: 8px; bottom: 10px; z-index: 10;
+    display: flex; flex-direction: column; gap: 6px;
     font-family: "Courier New", monospace;
-    font-size: 12px;
-    color: rgba(170, 220, 255, 0.5);
-    z-index: 10; pointer-events: none;
+  }
+  #ctrl button {
+    font-family: inherit; font-size: 12px; color: #9fe;
+    background: rgba(10,20,24,0.6);
+    border: 1px solid rgba(120,255,220,0.3);
+    border-radius: 6px; padding: 7px 11px; min-width: 118px;
+    text-align: left; cursor: pointer;
+    text-shadow: 0 0 4px rgba(120,255,220,0.5);
+  }
+  #ctrl button:active { transform: scale(0.96); }
+  #ctrl button.on { color: #0a0a0f; background: #6ffacc; border-color: #6ffacc; text-shadow: none; }
+  #hint {
+    position: fixed; bottom: 14px; left: 0; right: 0; text-align: center;
+    font-family: "Courier New", monospace; font-size: 12px;
+    color: rgba(170,220,255,0.5); z-index: 10; pointer-events: none;
     transition: opacity 1s;
   }
-  /* start gate — guarantees a user gesture unlocks audio */
   #start {
-    position: fixed; inset: 0;
-    z-index: 20;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 14px;
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
     background: radial-gradient(circle at 50% 45%, #14142a 0%, #0a0a0f 70%);
-    color: #9cf;
-    font-family: "Courier New", monospace;
-    text-align: center;
+    color: #9cf; font-family: "Courier New", monospace; text-align: center;
     transition: opacity 0.5s;
   }
-  #start h1 {
-    font-size: 26px; letter-spacing: 3px;
-    color: #cff;
-    text-shadow: 0 0 14px #4cf, 0 0 30px #28f;
-  }
+  #start h1 { font-size: 26px; letter-spacing: 3px; color: #cff; text-shadow: 0 0 14px #4cf, 0 0 30px #28f; }
   #start p { font-size: 13px; color: #7af; opacity: 0.85; }
   #start .pulse {
-    margin-top: 8px;
-    font-size: 15px; color: #fff;
-    border: 1px solid #4cf; border-radius: 8px;
-    padding: 10px 22px;
+    margin-top: 8px; font-size: 15px; color: #fff;
+    border: 1px solid #4cf; border-radius: 8px; padding: 10px 22px;
     box-shadow: 0 0 18px rgba(70,200,255,0.5);
     animation: bob 1.1s ease-in-out infinite;
   }
-  @keyframes bob { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.08);} }
+  @keyframes bob { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
   #start.hidden { opacity: 0; pointer-events: none; }
 </style>
 </head>
@@ -127,11 +100,16 @@
   <div class="row">BLOBS <span id="blobCount">0/14</span></div>
   <button id="muteBtn">&#9834; ON</button>
 </div>
-<div id="hint">tap &middot; double-tap &middot; hold &middot; draw shapes &middot; surround a blob</div>
+<div id="ctrl">
+  <button id="rhythmBtn">&#9834; RANDOM BEAT</button>
+  <button id="blobsBtn">&#10022; RANDOM BLOBS</button>
+  <button id="autoBtn">&#9654; AUTO PLAY</button>
+</div>
+<div id="hint">tap = blob &middot; 2&times;tap = splash &middot; hold &middot; draw = electric</div>
 <div id="start">
   <h1>BLOB&nbsp;UNIVERSE</h1>
   <p>8-bit liquid playground &middot; sound on</p>
-  <div class="pulse">▶ TAP TO START</div>
+  <div class="pulse">&#9654; TAP TO START</div>
   <p style="font-size:11px;opacity:0.6">if silent: flip your phone's mute switch off</p>
 </div>
 
@@ -140,7 +118,7 @@
 (function () {
 
 // ============================================================================
-// Canvas setup — two layers: #fluid (gooey metaballs) + #fx (sharp effects)
+// Canvas setup — #fluid (metaballs) + #fx (sharp effects)
 // ============================================================================
 const fluidCanvas = document.getElementById("fluid");
 const fx = document.getElementById("fx");
@@ -148,23 +126,16 @@ const fctx = fluidCanvas.getContext("2d");
 const xctx = fx.getContext("2d");
 
 let W = 0, H = 0, DPR = 1;
-const FLUID_SCALE = 0.6; // render fluid layer low-res; CSS blur hides it (cheap)
+const FLUID_SCALE = 1; // full CSS-pixel resolution for a finer look
 
 function resize() {
   DPR = Math.min(window.devicePixelRatio || 1, 2);
-  W = window.innerWidth;
-  H = window.innerHeight;
-
-  // fluid layer (low-res, coords in CSS px via transform)
+  W = window.innerWidth; H = window.innerHeight;
   fluidCanvas.width = Math.max(1, Math.floor(W * FLUID_SCALE));
   fluidCanvas.height = Math.max(1, Math.floor(H * FLUID_SCALE));
   fctx.setTransform(FLUID_SCALE, 0, 0, FLUID_SCALE, 0, 0);
-
-  // fx layer (crisp pixels)
-  fx.width = Math.floor(W * DPR);
-  fx.height = Math.floor(H * DPR);
-  fx.style.width = W + "px";
-  fx.style.height = H + "px";
+  fx.width = Math.floor(W * DPR); fx.height = Math.floor(H * DPR);
+  fx.style.width = W + "px"; fx.style.height = H + "px";
   xctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   xctx.imageSmoothingEnabled = false;
 }
@@ -178,6 +149,7 @@ resize();
 const TAU = Math.PI * 2;
 const rand = (a, b) => a + Math.random() * (b - a);
 const randInt = (a, b) => Math.floor(rand(a, b + 1));
+const pick = arr => arr[randInt(0, arr.length - 1)];
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -190,29 +162,34 @@ function easeOutElastic(t) {
 const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
 // ============================================================================
-// AUDIO — procedural 8-bit electro with a rhythmic melody
+// AUDIO — deeper 8-bit, pattern-based, randomizable, instant reactions
 // ============================================================================
 const Audio = (function () {
-  let ac = null, master = null, limiter = null;
+  let ac = null, master = null, limiter = null, sub = null;
   let started = false, muted = false;
-  const targetGain = 0.5;
+  const targetGain = 0.55;
 
-  const NOTE = {
-    C2: 65.41, Eb2: 77.78, F2: 87.31, G2: 98.00,
-    G4: 392.00, Bb4: 466.16,
-    C5: 523.25, Eb5: 622.25, F5: 698.46, G5: 783.99, Bb5: 932.33,
-    C6: 1046.50,
-    C4: 261.63, E4: 329.63, E5: 659.25, B5: 987.77
+  // note table (lots of low octaves for a deeper sound)
+  const N = {
+    C1:32.70, G1:49.00, A1:55.00, C2:65.41, D2:73.42, Eb2:77.78, F2:87.31, G2:98.00, Ab2:103.83, Bb2:116.54,
+    C3:130.81, Eb3:155.56, F3:174.61, G3:196.00, Ab3:207.65, Bb3:233.08,
+    C4:261.63, Eb4:311.13, F4:349.23, G4:392.00,
+    C5:523.25, E5:659.25, G5:783.99, B5:987.77, E4:329.63, C4b:261.63
   };
-  const bassSeq = [NOTE.C2, NOTE.C2, NOTE.Eb2, NOTE.F2, NOTE.G2, NOTE.F2, NOTE.Eb2, NOTE.C2];
-  // 16-step lead riff (0 = rest) — C minor pentatonic, rhythmic
-  const leadSeq = [
-    NOTE.C5, 0, NOTE.Eb5, NOTE.G5, 0, NOTE.F5, 0, NOTE.Eb5,
-    NOTE.C5, 0, NOTE.G4, NOTE.Bb4, 0, NOTE.C5, NOTE.Eb5, 0
-  ];
+  const scale = [N.C2, N.Eb2, N.F2, N.G2, N.Bb2, N.C3, N.Eb3, N.F3]; // C minor pentatonic-ish
+  const leadScale = [N.C3, N.Eb3, N.F3, N.G3, N.Bb3, N.C4];
+
+  // editable patterns (16 steps)
+  const pat = {
+    kick:  [1,0,0,0, 1,0,0,1, 0,0,1,0, 1,0,0,0],
+    snare: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
+    hat:   [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
+    bass:  [N.C2,0,N.C2,0, N.G1,0,N.C2,0, N.Eb2,0,N.Eb2,0, N.F2,0,N.G1,0],
+    lead:  [N.C3,0,0,N.Eb3, 0,0,N.G3,0, N.C3,0,0,0, N.F3,0,N.Eb3,0]
+  };
 
   let noiseBuf = null;
-  function makeNoiseBuffer() {
+  function makeNoise() {
     const len = ac.sampleRate;
     noiseBuf = ac.createBuffer(1, len, ac.sampleRate);
     const d = noiseBuf.getChannelData(0);
@@ -226,12 +203,11 @@ const Audio = (function () {
     ac = new AC();
     limiter = ac.createDynamicsCompressor();
     limiter.threshold.value = -8; limiter.knee.value = 6;
-    limiter.ratio.value = 12; limiter.attack.value = 0.002; limiter.release.value = 0.18;
+    limiter.ratio.value = 12; limiter.attack.value = 0.002; limiter.release.value = 0.2;
     master = ac.createGain();
     master.gain.value = muted ? 0 : targetGain;
     master.connect(limiter); limiter.connect(ac.destination);
-    makeNoiseBuffer();
-    // iOS unlock: play one silent sample inside the gesture
+    makeNoise();
     const b = ac.createBuffer(1, 1, ac.sampleRate);
     const s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0);
     started = true;
@@ -242,115 +218,122 @@ const Audio = (function () {
   function kick(t) {
     const o = ac.createOscillator(), g = ac.createGain();
     o.type = "sine";
-    o.frequency.setValueAtTime(200, t);
-    o.frequency.exponentialRampToValueAtTime(40, t + 0.08);
-    g.gain.setValueAtTime(1.0, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.25);
+    o.frequency.setValueAtTime(170, t);
+    o.frequency.exponentialRampToValueAtTime(38, t + 0.1);
+    g.gain.setValueAtTime(1.1, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.3);
   }
   function snare(t) {
     const src = ac.createBufferSource(); src.buffer = noiseBuf;
-    const bp = ac.createBiquadFilter(); bp.type = "bandpass";
-    bp.frequency.value = 1200; bp.Q.value = 1.2;
+    const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 900; bp.Q.value = 1.0;
     const g = ac.createGain();
-    g.gain.setValueAtTime(0.55, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
-    src.connect(bp); bp.connect(g); g.connect(master);
-    src.start(t); src.stop(t + 0.09);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    src.connect(bp); bp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.11);
   }
-  function hat(t, open) {
+  function hat(t) {
     const o = ac.createOscillator(), g = ac.createGain();
-    const hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 6000;
-    o.type = "square"; o.frequency.value = 8000;
-    const dur = open ? 0.08 : 0.03;
-    g.gain.setValueAtTime(0.16, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(hp); hp.connect(g); g.connect(master);
-    o.start(t); o.stop(t + dur + 0.01);
+    const hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7000;
+    o.type = "square"; o.frequency.value = 9000;
+    g.gain.setValueAtTime(0.07, t); // quieter highs ("moins aigu")
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+    o.connect(hp); hp.connect(g); g.connect(master); o.start(t); o.stop(t + 0.04);
   }
   function bass(t, freq) {
+    // square + sub sine an octave below for depth
     const o = ac.createOscillator(), g = ac.createGain();
-    o.type = "square"; o.frequency.value = freq; o.detune.value = rand(-5, 5);
+    o.type = "square"; o.frequency.value = freq; o.detune.value = rand(-4, 4);
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.32, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.14);
+    g.gain.exponentialRampToValueAtTime(0.34, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.18);
+    const so = ac.createOscillator(), sg = ac.createGain();
+    so.type = "sine"; so.frequency.value = freq / 2;
+    sg.gain.setValueAtTime(0.0001, t);
+    sg.gain.exponentialRampToValueAtTime(0.4, t + 0.01);
+    sg.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    so.connect(sg); sg.connect(master); so.start(t); so.stop(t + 0.2);
   }
   function lead(t, freq) {
     const o = ac.createOscillator(), g = ac.createGain();
-    o.type = "square"; o.frequency.value = freq;
-    const o2 = ac.createOscillator(); o2.type = "triangle"; o2.frequency.value = freq * 2;
-    const g2 = ac.createGain(); g2.gain.value = 0.0;
+    o.type = "triangle"; o.frequency.value = freq; // softer, lower
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.22, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-    o.connect(g); g.connect(master);
-    o.start(t); o.stop(t + 0.18);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.2);
   }
   function tone(freq, type, t, dur, peak) {
     const o = ac.createOscillator(), g = ac.createGain();
     o.type = type; o.frequency.setValueAtTime(freq, t);
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.012, dur * 0.3));
+    g.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.01, dur * 0.3));
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
-    return o;
   }
 
+  // ---- instant reactions (played the moment they're called) --------------
   const reactions = {
-    tap() {
+    touch() { // instant tactile blip — low/mid, not shrill
       const t = now();
-      [NOTE.C5, NOTE.E5, NOTE.G5].forEach((f, i) =>
-        tone(f, "square", t + i * 0.05, 0.07, 0.3));
+      tone(pick([N.C3, N.Eb3, N.G3]), "square", t, 0.07, 0.3);
     },
-    doubleTap() {
+    create() {
       const t = now();
-      for (let i = 0; i < 5; i++) tone(rand(800, 2000), "square", t + i * 0.04, 0.05, 0.22);
+      [N.C3, N.G3, N.C4].forEach((f, i) => tone(f, "triangle", t + i * 0.035, 0.08, 0.24));
+    },
+    splash() { // double-tap explosion: wet descending burst
+      const t = now();
+      const src = ac.createBufferSource(); src.buffer = noiseBuf;
+      const lp = ac.createBiquadFilter(); lp.type = "lowpass";
+      lp.frequency.setValueAtTime(2200, t);
+      lp.frequency.exponentialRampToValueAtTime(200, t + 0.35);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.5, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+      src.connect(lp); lp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.37);
+      tone(N.C2, "sine", t, 0.3, 0.4);
     },
     longPress() {
       const t = now();
       const o = ac.createOscillator(), g = ac.createGain();
-      o.type = "sine"; o.frequency.value = 55;
+      o.type = "sine"; o.frequency.value = 48;
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.34, t + 0.8);
+      g.gain.exponentialRampToValueAtTime(0.4, t + 0.6);
       o.connect(g); g.connect(master); o.start(t);
       return { stop() {
         const tt = now();
-        g.gain.cancelScheduledValues(tt);
-        g.gain.setValueAtTime(g.gain.value, tt);
-        g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.7);
-        o.stop(tt + 0.75);
+        g.gain.cancelScheduledValues(tt); g.gain.setValueAtTime(g.gain.value, tt);
+        g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.6); o.stop(tt + 0.65);
       }};
     },
-    circle() {
+    electric() { // short zappy discharge, fades fast
       const t = now();
       const o = ac.createOscillator(), g = ac.createGain();
-      o.type = "sine";
-      o.frequency.setValueAtTime(200, t);
-      o.frequency.exponentialRampToValueAtTime(1200, t + 0.6);
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.28, t + 0.05);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.65);
-    },
-    triangle() {
-      const t = now();
-      [NOTE.C4, NOTE.E4, NOTE.G4].forEach((f, i) =>
-        tone(f, "sawtooth", t + i * 0.1, 0.09, 0.26));
-    },
-    square() {
-      const t = now(), step = 0.117;
-      for (let i = 0; i < 4; i++) tone(NOTE.G4, "square", t + i * step, 0.08, 0.24);
+      o.type = "sawtooth";
+      o.frequency.setValueAtTime(rand(420, 620), t);
+      o.frequency.exponentialRampToValueAtTime(rand(80, 140), t + 0.18);
+      const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 800; bp.Q.value = 4;
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+      o.connect(bp); bp.connect(g); g.connect(master); o.start(t); o.stop(t + 0.22);
+      // crackle
+      const src = ac.createBufferSource(); src.buffer = noiseBuf;
+      const hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 2000;
+      const ng = ac.createGain();
+      ng.gain.setValueAtTime(0.18, t);
+      ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+      src.connect(hp); hp.connect(ng); ng.connect(master); src.start(t); src.stop(t + 0.13);
     },
     surround() {
       const t = now();
-      [NOTE.C5, NOTE.E5, NOTE.G5, NOTE.B5].forEach(f => {
+      [N.C3, N.Eb3, N.G3, N.Bb3].forEach(f => {
         const o = ac.createOscillator(), g = ac.createGain();
         o.type = "sine"; o.frequency.value = f;
         g.gain.setValueAtTime(0.0001, t);
         g.gain.exponentialRampToValueAtTime(0.13, t + 0.1);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
-        o.connect(g); g.connect(master); o.start(t); o.stop(t + 1.05);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+        o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.95);
       });
     },
     whoosh() {
@@ -358,35 +341,41 @@ const Audio = (function () {
       const src = ac.createBufferSource(); src.buffer = noiseBuf;
       const lp = ac.createBiquadFilter(); lp.type = "lowpass";
       lp.frequency.setValueAtTime(300, t);
-      lp.frequency.exponentialRampToValueAtTime(4000, t + 0.3);
+      lp.frequency.exponentialRampToValueAtTime(2500, t + 0.3);
       lp.frequency.exponentialRampToValueAtTime(300, t + 0.6);
       const g = ac.createGain();
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.32, t + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.3, t + 0.1);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-      src.connect(lp); lp.connect(g); g.connect(master);
-      src.start(t); src.stop(t + 0.62);
+      src.connect(lp); lp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.62);
     }
   };
-  // guard every reaction so it no-ops before audio exists
   const fxApi = {};
-  for (const k in reactions) {
-    fxApi[k] = function () { return started ? reactions[k]() : null; };
+  for (const k in reactions) fxApi[k] = function () { return started ? reactions[k]() : null; };
+
+  // randomize the groove
+  function randomizeRhythm() {
+    const density = rand(0.3, 0.7);
+    for (let i = 0; i < 16; i++) {
+      pat.kick[i]  = (i % 4 === 0) ? 1 : (Math.random() < 0.18 ? 1 : 0);
+      pat.snare[i] = (i === 4 || i === 12) ? 1 : (Math.random() < 0.06 ? 1 : 0);
+      pat.hat[i]   = (i % 2 === 0) ? 1 : (Math.random() < 0.25 ? 1 : 0);
+      pat.bass[i]  = (i % 2 === 0) ? (Math.random() < 0.85 ? pick(scale) : 0) : (Math.random() < 0.2 ? pick(scale) : 0);
+      pat.lead[i]  = (Math.random() < density * 0.4) ? pick(leadScale) : 0;
+    }
+    pat.kick[0] = 1; // keep a downbeat
   }
 
-  function setMuted(m) {
-    muted = m;
-    if (master) master.gain.linearRampToValueAtTime(m ? 0 : targetGain, now() + 0.05);
-  }
+  function setMuted(m) { muted = m; if (master) master.gain.linearRampToValueAtTime(m ? 0 : targetGain, now() + 0.05); }
 
   return {
-    init, resume, now, fx: fxApi, kick, snare, hat, bass, lead, bassSeq, leadSeq,
+    init, resume, now, fx: fxApi, kick, snare, hat, bass, lead, pat, randomizeRhythm,
     get started() { return started; }, setMuted, get muted() { return muted; }
   };
 })();
 
 // ============================================================================
-// SEQUENCER — 128 BPM
+// SEQUENCER — 128 BPM, pattern-driven
 // ============================================================================
 const SIXTEENTH = 60 / 128 / 4;
 const Sequencer = (function () {
@@ -394,19 +383,14 @@ const Sequencer = (function () {
   const lookahead = 0.12;
   let onBeat = null, onBar = null, onEightBars = null;
   const pending = [];
-
-  function start() {
-    if (started || !Audio.started) return;
-    started = true; step = 0; bar = 0;
-    nextStepTime = Audio.now() + 0.08;
-  }
+  function start() { if (started || !Audio.started) return; started = true; step = 0; bar = 0; nextStepTime = Audio.now() + 0.08; }
   function scheduleStep(s, t) {
-    if (s % 4 === 0) Audio.kick(t);
-    if (s === 4 || s === 12) Audio.snare(t);
-    if (s % 2 === 0) Audio.hat(t, false);
-    if (s === 2 || s === 6 || s === 10 || s === 14) Audio.hat(t, true);
-    if (s % 2 === 0) Audio.bass(t, Audio.bassSeq[(s / 2) % 8]);
-    const ln = Audio.leadSeq[s]; if (ln) Audio.lead(t, ln);
+    const p = Audio.pat;
+    if (p.kick[s])  Audio.kick(t);
+    if (p.snare[s]) Audio.snare(t);
+    if (p.hat[s])   Audio.hat(t);
+    if (p.bass[s])  Audio.bass(t, p.bass[s]);
+    if (p.lead[s])  Audio.lead(t, p.lead[s]);
     if (s % 4 === 0) pending.push({ time: t, step: s, bar });
   }
   function tick() {
@@ -414,126 +398,108 @@ const Sequencer = (function () {
     const t = Audio.now();
     while (nextStepTime < t + lookahead) {
       scheduleStep(step, nextStepTime);
-      nextStepTime += SIXTEENTH;
-      step++; if (step >= 16) { step = 0; bar++; }
+      nextStepTime += SIXTEENTH; step++;
+      if (step >= 16) { step = 0; bar++; }
     }
     while (pending.length && pending[0].time <= t) {
       const b = pending.shift();
       if (onBeat) onBeat(b.step, b.bar);
-      if (b.step === 0) {
-        if (onBar) onBar(b.bar);
-        if (b.bar % 8 === 0 && onEightBars) onEightBars(b.bar);
-      }
+      if (b.step === 0) { if (onBar) onBar(b.bar); if (b.bar % 8 === 0 && onEightBars) onEightBars(b.bar); }
     }
   }
-  return {
-    start, tick,
-    set onBeat(f){onBeat=f;}, set onBar(f){onBar=f;}, set onEightBars(f){onEightBars=f;}
-  };
+  return { start, tick, set onBeat(f){onBeat=f;}, set onBar(f){onBar=f;}, set onEightBars(f){onEightBars=f;} };
 })();
 
 // ============================================================================
-// PARTICLE POOL (300)
+// PARTICLE POOL
 // ============================================================================
-const PARTICLE_MAX = 300;
+const PARTICLE_MAX = 360;
 const particles = [];
 for (let i = 0; i < PARTICLE_MAX; i++)
-  particles.push({ active:false,x:0,y:0,vx:0,vy:0,life:0,maxLife:1,size:3,hue:0,sat:100,lum:60,rot:0,vrot:0 });
-let pc = 0;
-function spawnParticle(x, y, hue) {
+  particles.push({ active:false,x:0,y:0,vx:0,vy:0,life:0,maxLife:1,size:3,hue:0,sat:100,lum:60,rot:0,vrot:0,grav:0.04,decel:0.92 });
+let pcur = 0;
+function spawnParticle(x, y, hue, opts) {
   let p = null;
   for (let i = 0; i < PARTICLE_MAX; i++) {
-    const idx = (pc + i) % PARTICLE_MAX;
-    if (!particles[idx].active) { p = particles[idx]; pc = (idx + 1) % PARTICLE_MAX; break; }
+    const idx = (pcur + i) % PARTICLE_MAX;
+    if (!particles[idx].active) { p = particles[idx]; pcur = (idx + 1) % PARTICLE_MAX; break; }
   }
-  if (!p) { p = particles[pc]; pc = (pc + 1) % PARTICLE_MAX; }
-  const ang = rand(0, TAU), speed = rand(1.5, 8);
+  if (!p) { p = particles[pcur]; pcur = (pcur + 1) % PARTICLE_MAX; }
+  opts = opts || {};
+  const ang = rand(0, TAU), speed = rand(opts.minSpd || 1.5, opts.maxSpd || 8);
   p.active = true; p.x = x; p.y = y;
   p.vx = Math.cos(ang) * speed; p.vy = Math.sin(ang) * speed;
-  p.maxLife = rand(0.5, 1.2); p.life = p.maxLife;
-  p.size = Math.random() < 0.5 ? 3 : 4;
+  p.maxLife = rand(opts.minLife || 0.5, opts.maxLife || 1.2); p.life = p.maxLife;
+  p.size = opts.size || (Math.random() < 0.5 ? 3 : 4);
   p.hue = wrapHue(hue + rand(-30, 30));
-  p.sat = rand(85, 100); p.lum = rand(55, 75);
+  p.sat = rand(85, 100); p.lum = rand(55, 78);
   p.rot = rand(0, TAU); p.vrot = rand(-0.35, 0.35);
+  p.grav = opts.grav != null ? opts.grav : 0.04;
+  p.decel = opts.decel || 0.92;
 }
-function burst(x, y, hue, n) { for (let i = 0; i < n; i++) spawnParticle(x, y, hue); }
+function burst(x, y, hue, n, opts) { for (let i = 0; i < n; i++) spawnParticle(x, y, hue, opts); }
+function splash(x, y, hue, n) { // bigger, slower, liquid-like droplets
+  for (let i = 0; i < n; i++) spawnParticle(x, y, hue, { minSpd:1, maxSpd:5.5, minLife:0.7, maxLife:1.5, size:(Math.random()<0.5?4:5), grav:0.09, decel:0.9 });
+}
 function updateParticles(dt) {
   for (let i = 0; i < PARTICLE_MAX; i++) {
     const p = particles[i]; if (!p.active) continue;
     p.life -= dt; if (p.life <= 0) { p.active = false; continue; }
-    p.x += p.vx; p.y += p.vy; p.vx *= 0.92; p.vy *= 0.92; p.vy += 0.04; p.rot += p.vrot;
+    p.x += p.vx; p.y += p.vy; p.vx *= p.decel; p.vy *= p.decel; p.vy += p.grav; p.rot += p.vrot;
   }
 }
 function drawParticles() {
   for (let i = 0; i < PARTICLE_MAX; i++) {
     const p = particles[i]; if (!p.active) continue;
-    const a = clamp(p.life / p.maxLife, 0, 1);
     xctx.save();
-    xctx.globalAlpha = a;
+    xctx.globalAlpha = clamp(p.life / p.maxLife, 0, 1);
     xctx.translate(p.x, p.y); xctx.rotate(p.rot);
     const col = "hsl(" + p.hue + "," + p.sat + "%," + p.lum + "%)";
-    xctx.fillStyle = col; xctx.shadowBlur = 8; xctx.shadowColor = col;
+    xctx.fillStyle = col; xctx.shadowBlur = 6; xctx.shadowColor = col;
     xctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
     xctx.restore();
   }
 }
 
 // ============================================================================
-// SHAPES / RINGS (fx layer)
+// SHAPES / RINGS overlays
 // ============================================================================
 const shapes = [];
-function addShape(x, y, type, hue, baseSize) {
-  shapes.push({ x, y, type, hue, life: 0.4, maxLife: 0.4, baseSize: baseSize || 70 });
-}
-function updateShapes(dt) {
-  for (let i = shapes.length - 1; i >= 0; i--) { shapes[i].life -= dt; if (shapes[i].life <= 0) shapes.splice(i, 1); }
-}
+function addShape(x, y, type, hue, baseSize) { shapes.push({ x, y, type, hue, life: 0.4, maxLife: 0.4, baseSize: baseSize || 70 }); }
+function updateShapes(dt) { for (let i = shapes.length-1; i>=0; i--) { shapes[i].life -= dt; if (shapes[i].life <= 0) shapes.splice(i,1); } }
 function drawShapes() {
   for (const s of shapes) {
-    const t = 1 - s.life / s.maxLife;
-    const scale = lerp(0, 1.5, easeOutCubic(t)) * s.baseSize;
-    const alpha = 1 - t;
-    const sides = s.type === "triangle" ? 3 : s.type === "hexagon" ? 6 : 4;
-    const rot = -Math.PI / 2;
-    xctx.save();
-    xctx.globalAlpha = alpha;
-    xctx.strokeStyle = "hsl(" + s.hue + ",100%,65%)";
-    xctx.lineWidth = 2; xctx.shadowBlur = 12; xctx.shadowColor = "hsl(" + s.hue + ",100%,65%)";
+    const t = 1 - s.life / s.maxLife, scale = lerp(0, 1.5, easeOutCubic(t)) * s.baseSize, alpha = 1 - t;
+    const sides = s.type === "triangle" ? 3 : s.type === "hexagon" ? 6 : 4, rot = -Math.PI/2;
+    xctx.save(); xctx.globalAlpha = alpha;
+    xctx.strokeStyle = "hsl(" + s.hue + ",100%,65%)"; xctx.lineWidth = 2;
+    xctx.shadowBlur = 12; xctx.shadowColor = "hsl(" + s.hue + ",100%,65%)";
     xctx.beginPath();
-    for (let i = 0; i <= sides; i++) {
-      const a = rot + (i / sides) * TAU;
-      const px = s.x + Math.cos(a) * scale, py = s.y + Math.sin(a) * scale;
-      if (i === 0) xctx.moveTo(px, py); else xctx.lineTo(px, py);
-    }
+    for (let i = 0; i <= sides; i++) { const a = rot + (i/sides)*TAU; const px = s.x+Math.cos(a)*scale, py = s.y+Math.sin(a)*scale; if (i===0) xctx.moveTo(px,py); else xctx.lineTo(px,py); }
     xctx.stroke(); xctx.restore();
   }
 }
 const rings = [];
 function addRing(x, y, maxR, hue, dur) { rings.push({ x, y, life: dur||0.6, maxLife: dur||0.6, maxR, hue }); }
-function updateRings(dt) {
-  for (let i = rings.length - 1; i >= 0; i--) { rings[i].life -= dt; if (rings[i].life <= 0) rings.splice(i, 1); }
-}
+function updateRings(dt) { for (let i = rings.length-1; i>=0; i--) { rings[i].life -= dt; if (rings[i].life <= 0) rings.splice(i,1); } }
 function drawRings() {
   for (const r of rings) {
-    const t = 1 - r.life / r.maxLife;
-    const radius = lerp(0, r.maxR, easeOutCubic(t));
-    xctx.save();
-    xctx.globalAlpha = (1 - t) * 0.8;
-    xctx.strokeStyle = "hsl(" + r.hue + ",100%,70%)";
-    xctx.lineWidth = 2; xctx.shadowBlur = 14; xctx.shadowColor = "hsl(" + r.hue + ",100%,70%)";
-    xctx.beginPath(); xctx.arc(r.x, r.y, radius, 0, TAU); xctx.stroke();
-    xctx.restore();
+    const t = 1 - r.life / r.maxLife, radius = lerp(0, r.maxR, easeOutCubic(t));
+    xctx.save(); xctx.globalAlpha = (1 - t) * 0.8;
+    xctx.strokeStyle = "hsl(" + r.hue + ",100%,70%)"; xctx.lineWidth = 2;
+    xctx.shadowBlur = 14; xctx.shadowColor = "hsl(" + r.hue + ",100%,70%)";
+    xctx.beginPath(); xctx.arc(r.x, r.y, radius, 0, TAU); xctx.stroke(); xctx.restore();
   }
 }
 
 // ============================================================================
-// BLOB — drawn on the fluid layer (gooey filter does the merging)
+// BLOB — permanent (liquid) or electric (temporary, vibrating)
 // ============================================================================
 const MAX_BLOBS = 14, MIN_BLOBS = 8;
 let globalPulseSpeed = 1;
 
 class Blob {
-  constructor(x, y, radius, hue) {
+  constructor(x, y, radius, hue, electric) {
     this.x = x; this.y = y;
     this.baseRadius = radius; this.hue = hue;
     this.points = randInt(6, 8);
@@ -548,11 +514,16 @@ class Blob {
     this.ax = 0; this.ay = 0;
     this.wanderAng = rand(0, TAU);
     this.pulsePhase = rand(0, TAU); this.pulseSpeed = rand(0.7, 1.1);
-    this.glowIntensity = 0;
-    this.scaleAnim = 1; this.bounce = null; this.beatPulse = 0;
+    this.glowIntensity = 0; this.scaleAnim = 1; this.bounce = null; this.beatPulse = 0;
     this.starAmount = 0; this.starTimer = 0; this.hueShiftAnim = 0;
     this.circleMorph = 0; this.circleMorphTimer = 0;
     this.frozen = false; this.magnetTarget = null;
+    // electric temp state
+    this.electric = !!electric;
+    this.maxLife = electric ? rand(0.5, 1.0) : Infinity;
+    this.life = this.maxLife;
+    this.vibX = 0; this.vibY = 0;
+    if (electric) { this.triggerBounce(1.3, 0.3); this.glowIntensity = 1; }
   }
   get radius() { return this.baseRadius * this.scaleAnim * (1 + this.beatPulse); }
   triggerBounce(peak, dur) { this.bounce = { t: 0, dur: dur || 0.32, peak: peak || 1.4 }; this.glowIntensity = 1; }
@@ -561,201 +532,163 @@ class Blob {
 
   integrate(dt) {
     if (this.frozen) return;
-    // wander — smoothly steering random force for organic drift
-    this.wanderAng += rand(-0.5, 0.5) * dt * 6;
-    this.ax += Math.cos(this.wanderAng) * 9;
-    this.ay += Math.sin(this.wanderAng) * 9;
-    // magnet (long press)
-    if (this.magnetTarget) {
-      this.ax += (this.magnetTarget.x - this.x) * 6;
-      this.ay += (this.magnetTarget.y - this.y) * 6;
+    if (this.electric) {
+      // buzz around its spot — sharp random jolts (electric discharge)
+      this.vx += rand(-1, 1) * 2.4; this.vy += rand(-1, 1) * 2.4;
+      this.vibX = rand(-1, 1) * this.baseRadius * 0.18;
+      this.vibY = rand(-1, 1) * this.baseRadius * 0.18;
+    } else {
+      this.wanderAng += rand(-0.5, 0.5) * dt * 6;
+      this.ax += Math.cos(this.wanderAng) * 8;
+      this.ay += Math.sin(this.wanderAng) * 8;
     }
-    // integrate with damping
+    if (this.magnetTarget) { this.ax += (this.magnetTarget.x - this.x) * 6; this.ay += (this.magnetTarget.y - this.y) * 6; }
     this.vx += this.ax * dt; this.vy += this.ay * dt;
-    this.vx *= 0.94; this.vy *= 0.94;
-    const sp = Math.hypot(this.vx, this.vy), MAX = 2.6;
-    if (sp > MAX) { this.vx = this.vx / sp * MAX; this.vy = this.vy / sp * MAX; }
-    this.x += this.vx; this.y += this.vy;
-    this.ax = 0; this.ay = 0;
-    // soft walls — flow back inside
+    this.vx *= this.electric ? 0.7 : 0.94; this.vy *= this.electric ? 0.7 : 0.94;
+    const sp = Math.hypot(this.vx, this.vy), MAX = this.electric ? 4 : 2.4;
+    if (sp > MAX) { this.vx = this.vx/sp*MAX; this.vy = this.vy/sp*MAX; }
+    this.x += this.vx; this.y += this.vy; this.ax = 0; this.ay = 0;
     const r = this.baseRadius * 0.6, k = 0.6;
     if (this.x < r) this.vx += (r - this.x) * k * dt * 8;
     if (this.x > W - r) this.vx -= (this.x - (W - r)) * k * dt * 8;
     if (this.y < r) this.vy += (r - this.y) * k * dt * 8;
     if (this.y > H - r) this.vy -= (this.y - (H - r)) * k * dt * 8;
   }
-
   animate(dt, time) {
-    this.pulsePhase += this.pulseSpeed * globalPulseSpeed * dt;
-    const idlePulse = 1 + Math.sin(this.pulsePhase) * 0.15;
+    if (this.electric) this.life -= dt;
+    this.pulsePhase += this.pulseSpeed * globalPulseSpeed * (this.electric ? 5 : 1) * dt;
+    const idlePulse = 1 + Math.sin(this.pulsePhase) * (this.electric ? 0.25 : 0.15);
     let bounceScale = 1;
-    if (this.bounce) {
-      this.bounce.t += dt;
-      const bt = this.bounce.t / this.bounce.dur;
-      if (bt >= 1) this.bounce = null;
-      else bounceScale = this.bounce.peak + (1 - this.bounce.peak) * easeOutElastic(bt);
-    }
+    if (this.bounce) { this.bounce.t += dt; const bt = this.bounce.t / this.bounce.dur;
+      if (bt >= 1) this.bounce = null; else bounceScale = this.bounce.peak + (1 - this.bounce.peak) * easeOutElastic(bt); }
     this.scaleAnim = idlePulse * bounceScale;
     this.beatPulse *= Math.pow(0.001, dt);
     this.glowIntensity *= Math.pow(0.05, dt);
-    if (this.starTimer > 0) {
-      this.starTimer -= dt;
+    if (this.starTimer > 0) { this.starTimer -= dt;
       if (this.starTimer <= 0) { this.starAmount = 0; this.hueShiftAnim = 0; }
-      else if (this.starTimer < 0.4) { this.starAmount = this.starTimer / 0.4; this.hueShiftAnim = 180 * (this.starTimer / 0.4); }
-    }
-    if (this.circleMorphTimer > 0) {
-      this.circleMorphTimer -= dt;
-      this.circleMorph = this.circleMorphTimer <= 0 ? 0 : Math.min(1, this.circleMorphTimer / 0.4);
-    }
+      else if (this.starTimer < 0.4) { this.starAmount = this.starTimer/0.4; this.hueShiftAnim = 180*(this.starTimer/0.4); } }
+    if (this.circleMorphTimer > 0) { this.circleMorphTimer -= dt; this.circleMorph = this.circleMorphTimer <= 0 ? 0 : Math.min(1, this.circleMorphTimer/0.4); }
     this.hue = wrapHue(this.hue + 0.3 * (dt * 60) * 0.16);
   }
-
-  getControlPoints(time) {
-    const pts = [], r = this.radius;
+  getControlPoints(time, ox, oy) {
+    const pts = [], r = this.radius, cx = this.x + (ox||0), cy = this.y + (oy||0);
     for (let i = 0; i < this.points; i++) {
-      let baseAng = lerp(this.angles[i], (i / this.points) * TAU, this.circleMorph);
+      let baseAng = lerp(this.angles[i], (i/this.points)*TAU, this.circleMorph);
       const amp = this.amps[i] * (1 - this.circleMorph);
       const wob = Math.sin(time * this.speeds[i] + this.offsets[i]) * amp;
       let rr = r * (1 + wob);
-      if (this.starAmount > 0)
-        rr *= (i % 2 === 0) ? 1 + 0.6 * this.starAmount : 1 - 0.25 * this.starAmount;
-      pts.push({ x: this.x + Math.cos(baseAng) * rr, y: this.y + Math.sin(baseAng) * rr });
+      if (this.starAmount > 0) rr *= (i % 2 === 0) ? 1 + 0.6*this.starAmount : 1 - 0.25*this.starAmount;
+      // electric spike jitter per point
+      if (this.electric) rr *= 1 + rand(-0.18, 0.18);
+      pts.push({ x: cx + Math.cos(baseAng) * rr, y: cy + Math.sin(baseAng) * rr });
     }
     return pts;
   }
-
-  // draw onto the fluid ctx — bright saturated fill; CSS filter fuses neighbours
   draw(time) {
-    const pts = this.getControlPoints(time), n = pts.length, r = this.radius;
-    const drawHue = wrapHue(this.hue + this.hueShiftAnim);
-    const grad = fctx.createRadialGradient(this.x, this.y, r * 0.1, this.x, this.y, r * 1.25);
-    grad.addColorStop(0, "hsl(" + drawHue + ",100%,72%)");
+    const ox = this.electric ? this.vibX : 0, oy = this.electric ? this.vibY : 0;
+    const pts = this.getControlPoints(time, ox, oy), n = pts.length, r = this.radius;
+    let drawHue = wrapHue(this.hue + this.hueShiftAnim);
+    let alpha = 1;
+    if (this.electric) {
+      // electric look: brighter, bluish flicker, fade as it dies
+      drawHue = wrapHue(drawHue + 10);
+      alpha = (Math.random() < 0.12 ? 0.4 : 1) * clamp(this.life / this.maxLife + 0.2, 0, 1);
+    }
+    const cx = this.x + ox, cy = this.y + oy;
+    const grad = fctx.createRadialGradient(cx, cy, r*0.1, cx, cy, r*1.25);
+    const litCore = this.electric ? 90 : 72;
+    grad.addColorStop(0, "hsl(" + drawHue + ",100%," + litCore + "%)");
     grad.addColorStop(0.6, "hsl(" + drawHue + ",95%,58%)");
     grad.addColorStop(1, "hsl(" + drawHue + ",90%,48%)");
+    fctx.save();
+    fctx.globalAlpha = alpha;
     fctx.fillStyle = grad;
     fctx.beginPath();
-    const first = { x: (pts[n-1].x + pts[0].x)/2, y: (pts[n-1].y + pts[0].y)/2 };
+    const first = { x:(pts[n-1].x+pts[0].x)/2, y:(pts[n-1].y+pts[0].y)/2 };
     fctx.moveTo(first.x, first.y);
-    for (let i = 0; i < n; i++) {
-      const cur = pts[i], nx = pts[(i+1)%n];
-      fctx.quadraticCurveTo(cur.x, cur.y, (cur.x+nx.x)/2, (cur.y+nx.y)/2);
-    }
-    fctx.closePath(); fctx.fill();
+    for (let i = 0; i < n; i++) { const c = pts[i], nx = pts[(i+1)%n]; fctx.quadraticCurveTo(c.x, c.y, (c.x+nx.x)/2, (c.y+nx.y)/2); }
+    fctx.closePath(); fctx.fill(); fctx.restore();
   }
 }
 
-// ----------------------------------------------------------------------------
-// Fluid forces — cohesion + separation make blobs flow & merge like liquid
-// ----------------------------------------------------------------------------
+// fluid forces (cohesion + separation) — tuned so they DON'T fill the screen
 function applyFluidForces() {
   for (let i = 0; i < blobs.length; i++) {
     for (let j = i + 1; j < blobs.length; j++) {
       const a = blobs[i], b = blobs[j];
-      let dx = b.x - a.x, dy = b.y - a.y;
-      let d = Math.hypot(dx, dy) || 0.001;
-      const ux = dx / d, uy = dy / d;
-      const sumR = a.baseRadius + b.baseRadius;
-      // cohesion: gentle pull when in neighbourhood
-      const cohRange = sumR + 220;
-      if (d < cohRange) {
-        const f = 7 * (1 - d / cohRange);
-        a.ax += ux * f; a.ay += uy * f;
-        b.ax -= ux * f; b.ay -= uy * f;
-      }
-      // separation: strong push when cores overlap (keeps liquid from collapsing)
-      const sep = sumR * 0.85;
-      if (d < sep) {
-        const f = 60 * (1 - d / sep);
-        a.ax -= ux * f; a.ay -= uy * f;
-        b.ax += ux * f; b.ay += uy * f;
-      }
+      let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001;
+      const ux = dx/d, uy = dy/d, sumR = a.baseRadius + b.baseRadius;
+      const cohRange = sumR + 90;          // shorter reach
+      if (d < cohRange) { const f = 3 * (1 - d/cohRange); a.ax += ux*f; a.ay += uy*f; b.ax -= ux*f; b.ay -= uy*f; }
+      const sep = sumR * 0.95;             // firmer separation -> spread out
+      if (d < sep) { const f = 55 * (1 - d/sep); a.ax -= ux*f; a.ay -= uy*f; b.ax += ux*f; b.ay += uy*f; }
     }
   }
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Population
-// ----------------------------------------------------------------------------
+// ============================================================================
 let blobs = [];
+function permanentCount() { let c = 0; for (const b of blobs) if (!b.electric) c++; return c; }
 function spawnInitialBlobs() {
   blobs = [];
-  const count = randInt(MIN_BLOBS, 11);
-  const baseHue = rand(0, 360);
+  const count = randInt(MIN_BLOBS, 11), baseHue = rand(0, 360);
   for (let i = 0; i < count; i++)
-    blobs.push(new Blob(rand(80, W-80), rand(100, H-80), rand(48, 120), wrapHue(baseHue + rand(-60, 60))));
+    blobs.push(new Blob(rand(80, W-80), rand(100, H-80), rand(30, 72), wrapHue(baseHue + rand(-60, 60))));
   updateBlobCountHUD();
 }
-function nearestBlob(x, y) {
+function addBlob(x, y, hue) {
+  if (permanentCount() >= MAX_BLOBS) return null;
+  const b = new Blob(x, y, rand(34, 74), hue == null ? rand(0,360) : hue);
+  b.triggerBounce(1.4, 0.4); b.glowIntensity = 1;
+  blobs.push(b); updateBlobCountHUD(); return b;
+}
+function spawnElectric(x, y, hue, count) {
+  for (let i = 0; i < count; i++) {
+    const e = new Blob(x + rand(-30, 30), y + rand(-30, 30), rand(20, 40), wrapHue(hue + rand(-20, 20)), true);
+    blobs.push(e);
+  }
+}
+function nearestBlob(x, y, permanentOnly) {
   let best = null, bd = Infinity;
-  for (const b of blobs) { const d = dist(x, y, b.x, b.y); if (d < bd) { bd = d; best = b; } }
+  for (const b of blobs) { if (permanentOnly && b.electric) continue; const d = dist(x, y, b.x, b.y); if (d < bd) { bd = d; best = b; } }
   return best;
 }
-function updateBlobCountHUD() {
-  document.getElementById("blobCount").textContent = blobs.length + "/" + MAX_BLOBS;
-}
+function updateBlobCountHUD() { document.getElementById("blobCount").textContent = permanentCount() + "/" + MAX_BLOBS; }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Beat flash + cascade
-// ----------------------------------------------------------------------------
+// ============================================================================
 let bgFlash = 0;
 let cascadeQueue = [], cascadeClock = 0;
-function startCascade() { cascadeQueue = []; blobs.forEach((b, i) => cascadeQueue.push({ blob: b, time: i * 0.1 })); cascadeClock = 0; }
+function startCascade() { cascadeQueue = []; blobs.forEach((b, i) => { if (!b.electric) cascadeQueue.push({ blob: b, time: i * 0.1 }); }); cascadeClock = 0; }
 function updateCascade(dt) {
   if (!cascadeQueue.length) return;
   cascadeClock += dt;
   while (cascadeQueue.length && cascadeQueue[0].time <= cascadeClock) {
     const it = cascadeQueue.shift();
-    if (blobs.includes(it.blob)) { burst(it.blob.x, it.blob.y, it.blob.hue, 40); it.blob.triggerBounce(1.3, 0.3); it.blob.glowIntensity = 1; }
+    if (blobs.includes(it.blob)) { burst(it.blob.x, it.blob.y, it.blob.hue, 36); it.blob.triggerBounce(1.3, 0.3); it.blob.glowIntensity = 1; }
   }
 }
-
 const beatDot = document.getElementById("beatDot");
-Sequencer.onBeat = function () {
-  for (const b of blobs) b.beatPulse = 0.1;
-  bgFlash = 0.035;
-  beatDot.classList.add("on");
-  setTimeout(() => beatDot.classList.remove("on"), 90);
-};
-Sequencer.onBar = function () {
-  if (blobs.length) { const b = blobs[randInt(0, blobs.length - 1)]; b.hue = wrapHue(b.hue + 60); }
-};
+Sequencer.onBeat = function () { for (const b of blobs) b.beatPulse = 0.1; bgFlash = 0.035; beatDot.classList.add("on"); setTimeout(() => beatDot.classList.remove("on"), 90); };
+Sequencer.onBar = function () { const perm = blobs.filter(b => !b.electric); if (perm.length) pick(perm).hue = wrapHue(pick(perm).hue + 60); };
 Sequencer.onEightBars = function (bar) { if (bar !== 0) startCascade(); };
 
 // ============================================================================
-// GESTURE TRAIL + reset grid (fx layer)
+// Trail
 // ============================================================================
 const trail = []; const TRAIL_MAX = 30;
 function addTrailPoint(x, y) { trail.push({ x, y, life: 0.5 }); if (trail.length > TRAIL_MAX) trail.shift(); }
-function updateTrail(dt) { for (let i = trail.length - 1; i >= 0; i--) { trail[i].life -= dt; if (trail[i].life <= 0) trail.splice(i, 1); } }
+function updateTrail(dt) { for (let i = trail.length-1; i>=0; i--) { trail[i].life -= dt; if (trail[i].life <= 0) trail.splice(i,1); } }
 function drawTrail(hue) {
   if (trail.length < 2) return;
-  xctx.save();
-  xctx.lineWidth = 3; xctx.lineCap = "round"; xctx.lineJoin = "round";
+  xctx.save(); xctx.lineWidth = 3; xctx.lineCap = "round"; xctx.lineJoin = "round";
   xctx.shadowBlur = 8; xctx.shadowColor = "hsl(" + hue + ",100%,65%)";
   for (let i = 1; i < trail.length; i++) {
-    xctx.globalAlpha = trail[i].life / 0.5;
-    xctx.strokeStyle = "hsl(" + hue + ",100%,65%)";
+    xctx.globalAlpha = trail[i].life / 0.5; xctx.strokeStyle = "hsl(" + hue + ",100%,65%)";
     xctx.beginPath(); xctx.moveTo(trail[i-1].x, trail[i-1].y); xctx.lineTo(trail[i].x, trail[i].y); xctx.stroke();
-  }
-  xctx.restore();
-}
-let resetGrid = null;
-function startResetGrid() {
-  const cols = 16, rows = Math.ceil(16 * H / W), cells = [];
-  for (let i = 0; i < cols * rows; i++) cells.push(wrapHue(rand(0, 360)));
-  resetGrid = { life: 0.8, maxLife: 0.8, cols, rows, cells };
-}
-function updateResetGrid(dt) { if (resetGrid) { resetGrid.life -= dt; if (resetGrid.life <= 0) resetGrid = null; } }
-function drawResetGrid() {
-  if (!resetGrid) return;
-  const { cols, rows, cells, life, maxLife } = resetGrid;
-  const t = 1 - life / maxLife;
-  const alpha = (t < 0.4 ? t / 0.4 : 1 - (t - 0.4) / 0.6);
-  const cw = W / cols, ch = H / rows;
-  xctx.save(); xctx.globalAlpha = clamp(alpha, 0, 1) * 0.85;
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-    xctx.fillStyle = "hsl(" + cells[r*cols+c] + ",90%,55%)";
-    xctx.fillRect(c*cw+1, r*ch+1, cw-2, ch-2);
   }
   xctx.restore();
 }
@@ -764,32 +697,26 @@ function drawResetGrid() {
 // ACTIONS
 // ============================================================================
 const Actions = {
-  tap(x, y) {
-    const b = nearestBlob(x, y);
-    if (b) { b.triggerBounce(1.45, 0.3); burst(b.x, b.y, b.hue, 32); }
-    addShape(x, y, "diamond", b ? b.hue : 180, 60);
-    Audio.fx.tap();
+  tap(x, y) { // create a blob that joins the fluid
+    const nb = addBlob(x, y, null);
+    if (nb) { burst(x, y, nb.hue, 24, { maxSpd: 5 }); Audio.fx.create(); }
+    else { const b = nearestBlob(x, y, true); if (b) splash(b.x, b.y, b.hue, 40); Audio.fx.splash(); }
+    addShape(x, y, "diamond", nb ? nb.hue : 180, 50);
   },
-  doubleTap(x, y) {
-    const b = nearestBlob(x, y); if (!b) return;
-    Audio.fx.doubleTap();
-    if (blobs.length >= MAX_BLOBS) {
-      burst(b.x, b.y, b.hue, 80);
+  doubleTap(x, y) { // explode a blob into a liquid splash
+    const b = nearestBlob(x, y, true);
+    Audio.fx.splash();
+    if (b) {
+      splash(b.x, b.y, b.hue, 70);
+      addRing(b.x, b.y, b.baseRadius * 2.2, b.hue, 0.5);
       const idx = blobs.indexOf(b); if (idx >= 0) blobs.splice(idx, 1);
-    } else {
-      const nr = Math.max(44, b.baseRadius * 0.72);
-      b.baseRadius = nr;
-      const child = new Blob(b.x + rand(30, 60), b.y + rand(-30, 30), nr, wrapHue(b.hue + 180));
-      child.triggerBounce(1.3, 0.4); b.triggerBounce(1.2, 0.4);
-      blobs.push(child);
+      updateBlobCountHUD();
     }
-    updateBlobCountHUD();
   },
   longPressStart(x, y) {
-    const nb = nearestBlob(x, y);
-    addRing(x, y, 200, nb ? nb.hue : 200, 0.7);
+    const nb = nearestBlob(x, y); addRing(x, y, 200, nb ? nb.hue : 200, 0.7);
     globalPulseSpeed = 3;
-    for (const b of blobs) if (dist(x, y, b.x, b.y) < 200) b.magnetTarget = { x, y };
+    for (const b of blobs) if (!b.electric && dist(x, y, b.x, b.y) < 200) b.magnetTarget = { x, y };
   },
   longPressEnd(x, y) {
     globalPulseSpeed = 1;
@@ -799,71 +726,56 @@ const Actions = {
       b.magnetTarget = null; b.triggerBounce(1.25, 0.4);
     }
   },
-  surround(cx, cy, b) {
-    b.surround(); burst(b.x, b.y, b.hue, 60);
-    addRing(b.x, b.y, b.baseRadius * 2, b.hue, 0.8); Audio.fx.surround();
-  },
-  drawCircle(cx, cy) {
-    Audio.fx.circle();
-    if (blobs.length < MAX_BLOBS) {
-      const nb = new Blob(cx, cy, rand(48, 92), rand(0, 360));
-      nb.triggerBounce(1.4, 0.4); nb.glowIntensity = 1;
-      blobs.push(nb); burst(cx, cy, nb.hue, 30); updateBlobCountHUD();
-    } else for (const b of blobs) b.morphCircle();
-  },
+  surround(cx, cy, b) { b.surround(); burst(b.x, b.y, b.hue, 50); addRing(b.x, b.y, b.baseRadius*2, b.hue, 0.8); Audio.fx.surround(); },
+  // all drawn shapes -> electric vibrating blobs that vanish fast + zap sound
+  drawCircle(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(3, 5)); addShape(cx, cy, "hexagon", hue, 70); burst(cx, cy, hue, 18); Audio.fx.electric(); },
   drawTriangle(corners, hue) {
-    Audio.fx.triangle();
-    let cx = 0, cy = 0; for (const c of corners) { cx += c.x; cy += c.y; }
-    cx /= corners.length; cy /= corners.length;
-    addShape(cx, cy, "triangle", hue, Math.max(dist(corners[0].x, corners[0].y, cx, cy), 90));
-    for (const c of corners) { const b = nearestBlob(c.x, c.y); if (b) { b.triggerBounce(1.35, 0.35); burst(b.x, b.y, b.hue, 25); } }
+    let cx = 0, cy = 0; for (const c of corners) { cx += c.x; cy += c.y; } cx /= corners.length; cy /= corners.length;
+    addShape(cx, cy, "triangle", hue, Math.max(dist(corners[0].x, corners[0].y, cx, cy), 80));
+    for (const c of corners) spawnElectric(c.x, c.y, hue, 2);
+    burst(cx, cy, hue, 18); Audio.fx.electric();
   },
-  drawSquare() {
-    Audio.fx.square();
-    for (const b of blobs) b.frozen = true;
-    startResetGrid();
-    setTimeout(() => { const bh = rand(0, 360); for (const b of blobs) { b.frozen = false; b.hue = wrapHue(bh + rand(-40, 40)); } }, 800);
-  },
-  pinch(x, y, grow) {
-    const b = nearestBlob(x, y); if (!b) return;
-    b.baseRadius = clamp(b.baseRadius * (grow ? 1.04 : 0.96), 20, 180);
-    Audio.fx.whoosh();
-  }
+  drawSquare(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(4, 6)); addShape(cx, cy, "diamond", hue, 80); burst(cx, cy, hue, 20); Audio.fx.electric(); },
+  pinch(x, y, grow) { const b = nearestBlob(x, y, true); if (!b) return; b.baseRadius = clamp(b.baseRadius * (grow ? 1.04 : 0.96), 18, 160); Audio.fx.whoosh(); }
 };
 
 // ============================================================================
-// GESTURE RECOGNITION
+// GESTURE RECOGNITION — instant sound, no-latency disambiguation
 // ============================================================================
 const Gesture = (function () {
   let active = false, startX = 0, startY = 0, startT = 0, lastX = 0, lastY = 0;
   let moved = false, maxMove = 0;
   const path = []; let pathLen = 0;
   let lpTimer = null, lpFired = false, lpDrone = null;
-  let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
+  let pendingTap = null; // {time,x,y,timer}
   let pinchActive = false, pinchStartDist = 0;
-  const TAP_TIME = 200, TAP_MOVE = 10, DOUBLE_GAP = 300, LP_TIME = 600;
+  const TAP_TIME = 220, TAP_MOVE = 10, DOUBLE_GAP = 280, LP_TIME = 600, TAP_RESOLVE = 200;
 
   function reset() { path.length = 0; pathLen = 0; moved = false; maxMove = 0; lpFired = false; if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } }
 
   function onStart(touches) {
     Audio.init(); Audio.resume(); Sequencer.start();
     if (touches.length >= 2) {
-      pinchActive = true;
-      pinchStartDist = dist(touches[0].x, touches[0].y, touches[1].x, touches[1].y);
+      pinchActive = true; pinchStartDist = dist(touches[0].x, touches[0].y, touches[1].x, touches[1].y);
       if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; }
       return;
     }
     const t = touches[0];
     active = true; startX = lastX = t.x; startY = lastY = t.y; startT = performance.now();
     reset(); path.push({ x: t.x, y: t.y }); addTrailPoint(t.x, t.y);
+    Audio.fx.touch(); // INSTANT feedback, zero latency
     lpTimer = setTimeout(() => {
-      if (active && maxMove < TAP_MOVE) { lpFired = true; Actions.longPressStart(startX, startY); lpDrone = Audio.fx.longPress(); }
+      if (active && maxMove < TAP_MOVE) {
+        // a 2nd touch turning into hold cancels any pending single-tap
+        if (pendingTap) { clearTimeout(pendingTap.timer); pendingTap = null; }
+        lpFired = true; Actions.longPressStart(startX, startY); lpDrone = Audio.fx.longPress();
+      }
     }, LP_TIME);
   }
   function onMove(touches) {
     if (pinchActive && touches.length >= 2) {
       const d = dist(touches[0].x, touches[0].y, touches[1].x, touches[1].y);
-      const cx = (touches[0].x + touches[1].x) / 2, cy = (touches[0].y + touches[1].y) / 2;
+      const cx = (touches[0].x+touches[1].x)/2, cy = (touches[0].y+touches[1].y)/2;
       if (Math.abs(d - pinchStartDist) > 18) { Actions.pinch(cx, cy, d > pinchStartDist); pinchStartDist = d; }
       return;
     }
@@ -882,45 +794,48 @@ const Gesture = (function () {
     const dt = performance.now() - startT;
     if (lpFired) { Actions.longPressEnd(startX, startY); if (lpDrone) { lpDrone.stop(); lpDrone = null; } return; }
     if (!moved && dt < TAP_TIME) {
-      const nowT = performance.now();
-      if (nowT - lastTapTime < DOUBLE_GAP && dist(lastTapX, lastTapY, startX, startY) < 40) {
-        Actions.doubleTap(startX, startY); lastTapTime = 0;
+      const nowT = performance.now(), tx = startX, ty = startY;
+      if (pendingTap && nowT - pendingTap.time < DOUBLE_GAP && dist(pendingTap.x, pendingTap.y, tx, ty) < 50) {
+        clearTimeout(pendingTap.timer); pendingTap = null;
+        Actions.doubleTap(tx, ty); // no single-tap blob was created -> clean splash
       } else {
-        lastTapTime = nowT; lastTapX = startX; lastTapY = startY;
-        const tx = startX, ty = startY;
-        setTimeout(() => { if (lastTapTime === nowT) Actions.tap(tx, ty); }, DOUBLE_GAP);
+        const pt = { time: nowT, x: tx, y: ty, timer: null };
+        pt.timer = setTimeout(() => { Actions.tap(tx, ty); pendingTap = null; }, TAP_RESOLVE);
+        pendingTap = pt;
       }
       return;
     }
     if (moved && pathLen > 60) classifyPath();
   }
 
-  function centroidOf(pts) { let cx = 0, cy = 0; for (const p of pts) { cx += p.x; cy += p.y; } return { x: cx/pts.length, y: cy/pts.length }; }
+  function centroidOf(pts) { let cx=0, cy=0; for (const p of pts) { cx+=p.x; cy+=p.y; } return { x: cx/pts.length, y: cy/pts.length }; }
   function isClosed() { const a = path[0], b = path[path.length-1]; return dist(a.x, a.y, b.x, b.y) < 60; }
   function classifyPath() {
     const c = centroidOf(path);
+    const nb = nearestBlob(c.x, c.y, true), hue = nb ? nb.hue : rand(160, 320);
     if (isClosed() && windsAround(c)) {
-      for (const b of blobs) if (pointInPath(b.x, b.y)) { Actions.surround(c.x, c.y, b); return; }
+      for (const b of blobs) if (!b.electric && pointInPath(b.x, b.y)) { Actions.surround(c.x, c.y, b); return; }
     }
     const corners = findCorners();
-    if (isCircular() && pathLen >= 150 && pathLen <= 900) { Actions.drawCircle(c.x, c.y); return; }
-    if (corners.length === 3) { const nb = nearestBlob(c.x, c.y); Actions.drawTriangle(corners, nb ? nb.hue : 200); return; }
-    if (corners.length === 4) { Actions.drawSquare(); return; }
-    if (isCircular()) Actions.drawCircle(c.x, c.y);
+    if (isCircular() && pathLen >= 150 && pathLen <= 900) { Actions.drawCircle(c.x, c.y, hue); return; }
+    if (corners.length === 3) { Actions.drawTriangle(corners, hue); return; }
+    if (corners.length === 4) { Actions.drawSquare(c.x, c.y, hue); return; }
+    if (isCircular()) Actions.drawCircle(c.x, c.y, hue);
+    else { spawnElectric(c.x, c.y, hue, 2); Audio.fx.electric(); } // any other scribble -> small zap
   }
   function windsAround(c) {
     let total = 0;
     for (let i = 1; i < path.length; i++) {
-      let da = Math.atan2(path[i].y - c.y, path[i].x - c.x) - Math.atan2(path[i-1].y - c.y, path[i-1].x - c.x);
+      let da = Math.atan2(path[i].y-c.y, path[i].x-c.x) - Math.atan2(path[i-1].y-c.y, path[i-1].x-c.x);
       while (da > Math.PI) da -= TAU; while (da < -Math.PI) da += TAU; total += da;
     }
     return Math.abs(total) > Math.PI * 1.5;
   }
   function pointInPath(px, py) {
     let inside = false;
-    for (let i = 0, j = path.length - 1; i < path.length; j = i++) {
+    for (let i = 0, j = path.length-1; i < path.length; j = i++) {
       const xi = path[i].x, yi = path[i].y, xj = path[j].x, yj = path[j].y;
-      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / ((yj - yi) || 1e-9) + xi)) inside = !inside;
+      if (((yi > py) !== (yj > py)) && (px < (xj-xi)*(py-yi)/((yj-yi)||1e-9)+xi)) inside = !inside;
     }
     return inside;
   }
@@ -929,27 +844,23 @@ const Gesture = (function () {
     const c = centroidOf(path); let mean = 0; const ds = [];
     for (const p of path) { const d = dist(p.x, p.y, c.x, c.y); ds.push(d); mean += d; }
     mean /= ds.length; if (mean < 20) return false;
-    let v = 0; for (const d of ds) v += (d - mean) * (d - mean);
-    return Math.sqrt(v / ds.length) / mean < 0.3;
+    let v = 0; for (const d of ds) v += (d-mean)*(d-mean);
+    return Math.sqrt(v/ds.length)/mean < 0.3;
   }
   function findCorners() {
     const simp = []; const minStep = 14; let prev = path[0]; simp.push(prev);
     for (const p of path) if (dist(p.x, p.y, prev.x, prev.y) >= minStep) { simp.push(p); prev = p; }
     if (simp.length < 4) return [];
     const cand = [];
-    for (let i = 1; i < simp.length - 1; i++) {
+    for (let i = 1; i < simp.length-1; i++) {
       const a = simp[i-1], b = simp[i], cc = simp[i+1];
-      let turn = Math.abs(Math.atan2(cc.y - b.y, cc.x - b.x) - Math.atan2(b.y - a.y, b.x - a.x));
+      let turn = Math.abs(Math.atan2(cc.y-b.y, cc.x-b.x) - Math.atan2(b.y-a.y, b.x-a.x));
       while (turn > Math.PI) turn = Math.abs(turn - TAU);
       cand.push({ i, turn, x: b.x, y: b.y });
     }
     cand.sort((p, q) => q.turn - p.turn);
     const chosen = [];
-    for (const c of cand) {
-      if (c.turn < 0.7) break;
-      let near = false; for (const ch of chosen) if (Math.abs(ch.i - c.i) < 3) { near = true; break; }
-      if (!near) chosen.push(c); if (chosen.length >= 4) break;
-    }
+    for (const c of cand) { if (c.turn < 0.7) break; let near = false; for (const ch of chosen) if (Math.abs(ch.i - c.i) < 3) { near = true; break; } if (!near) chosen.push(c); if (chosen.length >= 4) break; }
     chosen.sort((p, q) => p.i - q.i);
     return chosen.map(c => ({ x: c.x, y: c.y }));
   }
@@ -972,31 +883,54 @@ fx.addEventListener("touchend", (e) => {
   Gesture.onEnd(rem);
 }, { passive: false });
 fx.addEventListener("touchcancel", () => Gesture.onEnd([]), { passive: false });
-
 let mouseDown = false;
 fx.addEventListener("mousedown", (e) => { mouseDown = true; Gesture.onStart([{ x: e.clientX, y: e.clientY }]); });
 fx.addEventListener("mousemove", (e) => { if (mouseDown) Gesture.onMove([{ x: e.clientX, y: e.clientY }]); });
 window.addEventListener("mouseup", () => { if (mouseDown) { mouseDown = false; Gesture.onEnd([]); } });
 
-// start gate
+// ============================================================================
+// Controls: start gate, mute, random beat, random blobs, auto-play
+// ============================================================================
 const startEl = document.getElementById("start");
-function unlock() {
-  Audio.init(); Audio.resume(); Sequencer.start();
-  startEl.classList.add("hidden");
-  setTimeout(() => { if (startEl.parentNode) startEl.parentNode.removeChild(startEl); }, 600);
-}
+function unlock() { Audio.init(); Audio.resume(); Sequencer.start(); startEl.classList.add("hidden"); setTimeout(() => { if (startEl.parentNode) startEl.parentNode.removeChild(startEl); }, 600); }
 startEl.addEventListener("touchstart", (e) => { e.preventDefault(); unlock(); }, { passive: false });
 startEl.addEventListener("mousedown", unlock);
 
 const muteBtn = document.getElementById("muteBtn");
-muteBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  Audio.init(); Audio.resume(); Sequencer.start();
-  const m = !Audio.muted; Audio.setMuted(m);
-  muteBtn.classList.toggle("muted", m);
-  muteBtn.innerHTML = m ? "&#9834; OFF" : "&#9834; ON";
-});
+muteBtn.addEventListener("click", (e) => { e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start();
+  const m = !Audio.muted; Audio.setMuted(m); muteBtn.classList.toggle("muted", m); muteBtn.innerHTML = m ? "&#9834; OFF" : "&#9834; ON"; });
 muteBtn.addEventListener("touchstart", (e) => e.stopPropagation());
+
+const rhythmBtn = document.getElementById("rhythmBtn");
+function doRhythm(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start(); Audio.randomizeRhythm();
+  rhythmBtn.classList.add("on"); setTimeout(() => rhythmBtn.classList.remove("on"), 180); }
+rhythmBtn.addEventListener("click", doRhythm);
+rhythmBtn.addEventListener("touchstart", (e) => { e.preventDefault(); doRhythm(e); }, { passive: false });
+
+const blobsBtn = document.getElementById("blobsBtn");
+function doBlobs(e) { if (e) e.stopPropagation(); spawnInitialBlobs();
+  for (const b of blobs) { b.triggerBounce(1.4, 0.4); burst(b.x, b.y, b.hue, 16); }
+  blobsBtn.classList.add("on"); setTimeout(() => blobsBtn.classList.remove("on"), 180); }
+blobsBtn.addEventListener("click", doBlobs);
+blobsBtn.addEventListener("touchstart", (e) => { e.preventDefault(); doBlobs(e); }, { passive: false });
+
+// auto-play mode
+let autoOn = false, autoAccum = 0, autoNext = 0;
+const autoBtn = document.getElementById("autoBtn");
+function toggleAuto(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start();
+  autoOn = !autoOn; autoBtn.classList.toggle("on", autoOn); autoAccum = 0; autoNext = 0; }
+autoBtn.addEventListener("click", toggleAuto);
+autoBtn.addEventListener("touchstart", (e) => { e.preventDefault(); toggleAuto(e); }, { passive: false });
+
+function autoAction() {
+  const x = rand(60, W - 60), y = rand(90, H - 60);
+  const r = Math.random();
+  const hue = (nearestBlob(x, y, true) || {}).hue;
+  if (r < 0.42) Actions.tap(x, y);
+  else if (r < 0.6) Actions.doubleTap(x, y);
+  else if (r < 0.82) { Actions.drawCircle(x, y, hue == null ? rand(0,360) : hue); }
+  else { const b = nearestBlob(x, y, true); if (b) Actions.surround(x, y, b); else Actions.tap(x, y); }
+}
 
 setTimeout(() => { const h = document.getElementById("hint"); if (h) h.style.opacity = "0"; }, 8000);
 
@@ -1005,33 +939,34 @@ setTimeout(() => { const h = document.getElementById("hint"); if (h) h.style.opa
 // ============================================================================
 let lastTime = performance.now(), time = 0;
 function frame(nowMs) {
-  let dt = (nowMs - lastTime) / 1000; lastTime = nowMs;
-  if (dt > 0.05) dt = 0.05;
-  time += dt;
-
+  let dt = (nowMs - lastTime) / 1000; lastTime = nowMs; if (dt > 0.05) dt = 0.05; time += dt;
   Sequencer.tick();
+
+  // auto-play
+  if (autoOn) { autoAccum += dt; if (autoAccum >= autoNext) { autoAction(); autoAccum = 0; autoNext = rand(0.3, 1.0); } }
 
   // physics
   applyFluidForces();
   for (const b of blobs) { b.integrate(dt); b.animate(dt, time); }
-  updateParticles(dt); updateShapes(dt); updateRings(dt); updateTrail(dt); updateResetGrid(dt); updateCascade(dt);
+  // reap dead electric blobs
+  for (let i = blobs.length - 1; i >= 0; i--) if (blobs[i].electric && blobs[i].life <= 0) blobs.splice(i, 1);
+
+  updateParticles(dt); updateShapes(dt); updateRings(dt); updateTrail(dt); updateCascade(dt);
   if (bgFlash > 0) bgFlash = Math.max(0, bgFlash - dt * 0.3);
 
-  // ---- fluid layer (metaballs) ----
-  fctx.save();
-  fctx.setTransform(FLUID_SCALE, 0, 0, FLUID_SCALE, 0, 0);
+  // fluid layer
+  fctx.save(); fctx.setTransform(FLUID_SCALE, 0, 0, FLUID_SCALE, 0, 0);
   fctx.clearRect(0, 0, W, H);
-  fctx.fillStyle = "#06060c"; fctx.fillRect(0, 0, W, H); // opaque bg so contrast filter thresholds cleanly
+  fctx.fillStyle = "#06060c"; fctx.fillRect(0, 0, W, H);
   const sorted = blobs.slice().sort((a, b) => b.baseRadius - a.baseRadius);
   for (const b of sorted) b.draw(time);
   fctx.restore();
 
-  // ---- fx layer (sharp) ----
+  // fx layer
   xctx.clearRect(0, 0, W, H);
   if (bgFlash > 0) { xctx.save(); xctx.globalAlpha = bgFlash; xctx.fillStyle = "#fff"; xctx.fillRect(0, 0, W, H); xctx.restore(); }
   drawParticles(); drawRings(); drawShapes();
   drawTrail(blobs.length ? blobs[0].hue : 200);
-  drawResetGrid();
 
   requestAnimationFrame(frame);
 }
