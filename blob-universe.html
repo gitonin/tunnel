@@ -462,7 +462,6 @@ function frame(nowMs){
   xctx.clearRect(0,0,W,H);
   if(bgFlash>0){xctx.save();xctx.globalAlpha=bgFlash;xctx.fillStyle="#b9c6ef";xctx.fillRect(0,0,W,H);xctx.restore();}
   drawParticles();
-  for(let li=0;li<planes.length;li++) for(const b of blobs) if(b.layer===li) drawFace(b);
   requestAnimationFrame(frame);
 }
 spawnInitial();
