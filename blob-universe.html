@@ -11,83 +11,82 @@
   html, body {
     width: 100%; height: 100%;
     overflow: hidden;
-    background: #0a0a0f;
+    background: #fbfbf9;
     touch-action: none;
     -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: none;
   }
-  /* fluid (metaball) layer — finer, smoother gooey filter */
+  /* fluid (metaball) layer — soft, heavily blurred pastel clouds */
   #fluid {
     position: fixed; inset: 0;
     width: 100%; height: 100%;
     display: block;
-    filter: blur(5px) contrast(11) saturate(1.15);
-    -webkit-filter: blur(5px) contrast(11) saturate(1.15);
+    filter: blur(15px) saturate(1.08);
+    -webkit-filter: blur(15px) saturate(1.08);
   }
   #fx { position: fixed; inset: 0; display: block; }
   #scan {
     position: fixed; inset: 0; pointer-events: none; z-index: 5;
     background: repeating-linear-gradient(
-      0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+      0deg, rgba(0,0,0,0.018) 0px, rgba(0,0,0,0.018) 1px,
       rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px);
   }
   #hud {
     position: fixed; top: 8px; right: 8px;
     font-family: "Courier New", Courier, monospace;
-    font-size: 12px; line-height: 1.5; color: #aef;
-    background: rgba(10,10,20,0.55);
-    border: 1px solid rgba(120,200,255,0.25);
-    border-radius: 6px; padding: 6px 9px; z-index: 10;
-    text-shadow: 0 0 4px rgba(120,200,255,0.6);
+    font-size: 12px; line-height: 1.5; color: #5c6b85;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(130,150,190,0.3);
+    border-radius: 8px; padding: 6px 9px; z-index: 10;
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
   }
   #hud .row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-  #beatDot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2a3a4a; }
-  #beatDot.on { background: #6ff; box-shadow: 0 0 8px #6ff; }
+  #beatDot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ccd3df; transition: background .1s; }
+  #beatDot.on { background: #86b4ff; box-shadow: 0 0 8px #a9c8ff; }
   #muteBtn {
-    font-family: inherit; font-size: 12px; color: #aef;
-    background: rgba(120,200,255,0.12); border: 1px solid rgba(120,200,255,0.3);
-    border-radius: 4px; padding: 2px 7px; margin-top: 3px; cursor: pointer;
+    font-family: inherit; font-size: 12px; color: #5c6b85;
+    background: rgba(170,200,255,0.18); border: 1px solid rgba(130,150,190,0.35);
+    border-radius: 6px; padding: 2px 7px; margin-top: 3px; cursor: pointer;
   }
-  #muteBtn.muted { color: #f88; border-color: rgba(255,120,120,0.4); }
-  /* control bar (bottom-left) */
+  #muteBtn.muted { color: #c76; border-color: rgba(220,130,120,0.5); }
   #ctrl {
     position: fixed; left: 8px; bottom: 10px; z-index: 10;
     display: flex; flex-direction: column; gap: 6px;
     font-family: "Courier New", monospace;
   }
   #ctrl button {
-    font-family: inherit; font-size: 12px; color: #9fe;
-    background: rgba(10,20,24,0.6);
-    border: 1px solid rgba(120,255,220,0.3);
-    border-radius: 6px; padding: 7px 11px; min-width: 118px;
+    font-family: inherit; font-size: 12px; color: #4a7f8a;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(130,185,195,0.45);
+    border-radius: 8px; padding: 7px 11px; min-width: 120px;
     text-align: left; cursor: pointer;
-    text-shadow: 0 0 4px rgba(120,255,220,0.5);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
   }
   #ctrl button:active { transform: scale(0.96); }
-  #ctrl button.on { color: #0a0a0f; background: #6ffacc; border-color: #6ffacc; text-shadow: none; }
+  #ctrl button.on { color: #2a4a44; background: #a9e5d6; border-color: #8fd9c6; }
   #hint {
     position: fixed; bottom: 14px; left: 0; right: 0; text-align: center;
     font-family: "Courier New", monospace; font-size: 12px;
-    color: rgba(170,220,255,0.5); z-index: 10; pointer-events: none;
+    color: rgba(90,110,140,0.55); z-index: 10; pointer-events: none;
     transition: opacity 1s;
   }
   #start {
     position: fixed; inset: 0; z-index: 20;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-    background: radial-gradient(circle at 50% 45%, #14142a 0%, #0a0a0f 70%);
-    color: #9cf; font-family: "Courier New", monospace; text-align: center;
+    background: radial-gradient(circle at 50% 42%, #ffffff 0%, #eef0f7 72%);
+    color: #6a7a95; font-family: "Courier New", monospace; text-align: center;
     transition: opacity 0.5s;
   }
-  #start h1 { font-size: 26px; letter-spacing: 3px; color: #cff; text-shadow: 0 0 14px #4cf, 0 0 30px #28f; }
-  #start p { font-size: 13px; color: #7af; opacity: 0.85; }
+  #start h1 { font-size: 26px; letter-spacing: 3px; color: #7b8bb8; text-shadow: 0 0 18px rgba(160,180,240,0.6); }
+  #start p { font-size: 13px; color: #8a97b5; opacity: 0.9; }
   #start .pulse {
-    margin-top: 8px; font-size: 15px; color: #fff;
-    border: 1px solid #4cf; border-radius: 8px; padding: 10px 22px;
-    box-shadow: 0 0 18px rgba(70,200,255,0.5);
-    animation: bob 1.1s ease-in-out infinite;
+    margin-top: 8px; font-size: 15px; color: #5f6f9a;
+    border: 1px solid #aebbe0; border-radius: 10px; padding: 10px 22px;
+    box-shadow: 0 0 18px rgba(170,190,240,0.5);
+    animation: bob 1.4s ease-in-out infinite;
   }
-  @keyframes bob { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+  @keyframes bob { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
   #start.hidden { opacity: 0; pointer-events: none; }
 </style>
 </head>
@@ -96,19 +95,19 @@
 <canvas id="fx"></canvas>
 <div id="scan"></div>
 <div id="hud">
-  <div class="row"><span>BPM 128</span><span id="beatDot"></span></div>
+  <div class="row"><span id="bpmLabel">BPM 84</span><span id="beatDot"></span></div>
   <div class="row">BLOBS <span id="blobCount">0/14</span></div>
   <button id="muteBtn">&#9834; ON</button>
 </div>
 <div id="ctrl">
-  <button id="rhythmBtn">&#9834; RANDOM BEAT</button>
+  <button id="rhythmBtn">&#9834; RANDOM MELODY</button>
   <button id="blobsBtn">&#10022; RANDOM BLOBS</button>
   <button id="autoBtn">&#9654; AUTO PLAY</button>
 </div>
 <div id="hint">tap = blob &middot; 2&times;tap = splash &middot; hold &middot; draw = electric</div>
 <div id="start">
   <h1>BLOB&nbsp;UNIVERSE</h1>
-  <p>8-bit liquid playground &middot; sound on</p>
+  <p>soft liquid playground &middot; sound on</p>
   <div class="pulse">&#9654; TAP TO START</div>
   <p style="font-size:11px;opacity:0.6">if silent: flip your phone's mute switch off</p>
 </div>
@@ -118,7 +117,7 @@
 (function () {
 
 // ============================================================================
-// Canvas setup — #fluid (metaballs) + #fx (sharp effects)
+// Canvas setup — #fluid (soft pastel metaballs) + #fx (sharp effects)
 // ============================================================================
 const fluidCanvas = document.getElementById("fluid");
 const fx = document.getElementById("fx");
@@ -126,7 +125,7 @@ const fctx = fluidCanvas.getContext("2d");
 const xctx = fx.getContext("2d");
 
 let W = 0, H = 0, DPR = 1;
-const FLUID_SCALE = 1; // full CSS-pixel resolution for a finer look
+const FLUID_SCALE = 1;
 
 function resize() {
   DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -162,30 +161,35 @@ function easeOutElastic(t) {
 const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
 // ============================================================================
-// AUDIO — deeper 8-bit, pattern-based, randomizable, instant reactions
+// AUDIO — soft, slow, melodic & zen (84 BPM): pads, bells, warm bass
 // ============================================================================
 const Audio = (function () {
-  let ac = null, master = null, limiter = null, sub = null;
+  let ac = null, master = null, limiter = null, reverb = null, revGain = null;
   let started = false, muted = false;
-  const targetGain = 0.55;
+  const targetGain = 0.5;
 
-  // note table (lots of low octaves for a deeper sound)
+  // C major pentatonic across octaves — warm, consonant, no harsh intervals
   const N = {
-    C1:32.70, G1:49.00, A1:55.00, C2:65.41, D2:73.42, Eb2:77.78, F2:87.31, G2:98.00, Ab2:103.83, Bb2:116.54,
-    C3:130.81, Eb3:155.56, F3:174.61, G3:196.00, Ab3:207.65, Bb3:233.08,
-    C4:261.63, Eb4:311.13, F4:349.23, G4:392.00,
-    C5:523.25, E5:659.25, G5:783.99, B5:987.77, E4:329.63, C4b:261.63
+    C2:65.41, G1:49.00, A1:55.00, F2:87.31, G2:98.00, D2:73.42, E2:82.41,
+    C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00, B2:123.47,
+    C4:261.63, D4:293.66, E4:329.63, G4:392.00, A4:440.00,
+    C5:523.25, D5:587.33, E5:659.25, G5:783.99, A5:880.00
   };
-  const scale = [N.C2, N.Eb2, N.F2, N.G2, N.Bb2, N.C3, N.Eb3, N.F3]; // C minor pentatonic-ish
-  const leadScale = [N.C3, N.Eb3, N.F3, N.G3, N.Bb3, N.C4];
+  const bellScale = [N.C4, N.D4, N.E4, N.G4, N.A4, N.C5, N.D5, N.E5];
+  // gentle I–vi–IV–V progression (one chord per bar), low & warm for pads
+  const chordProg = [
+    [N.C3, N.E3, N.G3],  // C
+    [N.A1*2, N.C3, N.E3], // Am (A2,C3,E3)
+    [N.F2, N.A3*0.5, N.C3], // F (F2,A2,C3)
+    [N.G2, N.B2, N.D3]    // G
+  ];
+  const bassRoots = [N.C2, N.A1, N.F2, N.G2];
 
-  // editable patterns (16 steps)
+  // step patterns (16 steps)
   const pat = {
-    kick:  [1,0,0,0, 1,0,0,1, 0,0,1,0, 1,0,0,0],
-    snare: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
-    hat:   [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
-    bass:  [N.C2,0,N.C2,0, N.G1,0,N.C2,0, N.Eb2,0,N.Eb2,0, N.F2,0,N.G1,0],
-    lead:  [N.C3,0,0,N.Eb3, 0,0,N.G3,0, N.C3,0,0,0, N.F3,0,N.Eb3,0]
+    kick: [1,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0],
+    hat:  [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
+    bell: [N.C4,0,0,N.E4, 0,0,N.G4,0, N.A4,0,0,N.G4, 0,N.E4,0,0]
   };
 
   let noiseBuf = null;
@@ -195,6 +199,18 @@ const Audio = (function () {
     const d = noiseBuf.getChannelData(0);
     for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
   }
+  function makeReverb() {
+    // short algorithmic-ish impulse for a soft, spacious tail
+    const len = Math.floor(ac.sampleRate * 2.2);
+    const buf = ac.createBuffer(2, len, ac.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.5);
+    }
+    reverb = ac.createConvolver(); reverb.buffer = buf;
+    revGain = ac.createGain(); revGain.gain.value = 0.35;
+    reverb.connect(revGain); revGain.connect(master);
+  }
 
   function init() {
     if (started) return;
@@ -202,12 +218,12 @@ const Audio = (function () {
     if (!AC) return;
     ac = new AC();
     limiter = ac.createDynamicsCompressor();
-    limiter.threshold.value = -8; limiter.knee.value = 6;
-    limiter.ratio.value = 12; limiter.attack.value = 0.002; limiter.release.value = 0.2;
+    limiter.threshold.value = -10; limiter.knee.value = 8;
+    limiter.ratio.value = 10; limiter.attack.value = 0.004; limiter.release.value = 0.25;
     master = ac.createGain();
     master.gain.value = muted ? 0 : targetGain;
     master.connect(limiter); limiter.connect(ac.destination);
-    makeNoise();
+    makeNoise(); makeReverb();
     const b = ac.createBuffer(1, 1, ac.sampleRate);
     const s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0);
     started = true;
@@ -215,189 +231,157 @@ const Audio = (function () {
   function resume() { if (ac && ac.state !== "running") ac.resume(); }
   function now() { return ac ? ac.currentTime : 0; }
 
+  // soft heartbeat kick
   function kick(t) {
     const o = ac.createOscillator(), g = ac.createGain();
     o.type = "sine";
-    o.frequency.setValueAtTime(170, t);
-    o.frequency.exponentialRampToValueAtTime(38, t + 0.1);
-    g.gain.setValueAtTime(1.1, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.3);
+    o.frequency.setValueAtTime(110, t);
+    o.frequency.exponentialRampToValueAtTime(44, t + 0.12);
+    g.gain.setValueAtTime(0.55, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.38);
   }
-  function snare(t) {
-    const src = ac.createBufferSource(); src.buffer = noiseBuf;
-    const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 900; bp.Q.value = 1.0;
-    const g = ac.createGain();
-    g.gain.setValueAtTime(0.5, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
-    src.connect(bp); bp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.11);
-  }
+  // soft brushed tick
   function hat(t) {
-    const o = ac.createOscillator(), g = ac.createGain();
+    const src = ac.createBufferSource(); src.buffer = noiseBuf;
     const hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7000;
-    o.type = "square"; o.frequency.value = 9000;
-    g.gain.setValueAtTime(0.07, t); // quieter highs ("moins aigu")
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
-    o.connect(hp); hp.connect(g); g.connect(master); o.start(t); o.stop(t + 0.04);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.035, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    src.connect(hp); hp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.07);
   }
+  // warm sine bass
   function bass(t, freq) {
-    // square + sub sine an octave below for depth
     const o = ac.createOscillator(), g = ac.createGain();
-    o.type = "square"; o.frequency.value = freq; o.detune.value = rand(-4, 4);
+    o.type = "sine"; o.frequency.value = freq;
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.34, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.18);
-    const so = ac.createOscillator(), sg = ac.createGain();
-    so.type = "sine"; so.frequency.value = freq / 2;
-    sg.gain.setValueAtTime(0.0001, t);
-    sg.gain.exponentialRampToValueAtTime(0.4, t + 0.01);
-    sg.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    so.connect(sg); sg.connect(master); so.start(t); so.stop(t + 0.2);
+    g.gain.exponentialRampToValueAtTime(0.34, t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.95);
   }
-  function lead(t, freq) {
+  // bell / mallet — triangle with soft attack, long tail, into reverb
+  function bell(t, freq, peak) {
     const o = ac.createOscillator(), g = ac.createGain();
-    o.type = "triangle"; o.frequency.value = freq; // softer, lower
+    o.type = "triangle"; o.frequency.value = freq;
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.16, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.2);
+    g.gain.exponentialRampToValueAtTime(peak || 0.2, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+    o.connect(g); g.connect(master);
+    if (reverb) g.connect(reverb);
+    o.start(t); o.stop(t + 0.95);
   }
-  function tone(freq, type, t, dur, peak) {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = type; o.frequency.setValueAtTime(freq, t);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.01, dur * 0.3));
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+  // sustained warm pad chord
+  function pad(t, freqs, dur) {
+    dur = dur || 2.6;
+    freqs.forEach(f => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = "triangle"; o.frequency.value = f; o.detune.value = rand(-6, 6);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.05, t + 0.5);
+      g.gain.linearRampToValueAtTime(0.045, t + dur * 0.6);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(master); if (reverb) g.connect(reverb);
+      o.start(t); o.stop(t + dur + 0.05);
+    });
   }
 
   // ---- instant reactions (played the moment they're called) --------------
   const reactions = {
-    touch() { // instant tactile blip — low/mid, not shrill
-      const t = now();
-      tone(pick([N.C3, N.Eb3, N.G3]), "square", t, 0.07, 0.3);
-    },
-    create() {
-      const t = now();
-      [N.C3, N.G3, N.C4].forEach((f, i) => tone(f, "triangle", t + i * 0.035, 0.08, 0.24));
-    },
-    splash() { // double-tap explosion: wet descending burst
+    touch() { const t = now(); bell(t, pick([N.C5, N.E5, N.G5]), 0.18); },
+    create() { const t = now(); [N.C4, N.E4, N.G4, N.C5].forEach((f, i) => bell(t + i * 0.08, f, 0.16)); },
+    splash() { // soft watery plop
       const t = now();
       const src = ac.createBufferSource(); src.buffer = noiseBuf;
       const lp = ac.createBiquadFilter(); lp.type = "lowpass";
-      lp.frequency.setValueAtTime(2200, t);
-      lp.frequency.exponentialRampToValueAtTime(200, t + 0.35);
+      lp.frequency.setValueAtTime(1400, t);
+      lp.frequency.exponentialRampToValueAtTime(250, t + 0.3);
       const g = ac.createGain();
-      g.gain.setValueAtTime(0.5, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-      src.connect(lp); lp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.37);
-      tone(N.C2, "sine", t, 0.3, 0.4);
+      g.gain.setValueAtTime(0.28, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      src.connect(lp); lp.connect(g); g.connect(master); if (reverb) g.connect(reverb);
+      src.start(t); src.stop(t + 0.32);
+      bell(t, N.C3, 0.18);
     },
     longPress() {
       const t = now();
       const o = ac.createOscillator(), g = ac.createGain();
-      o.type = "sine"; o.frequency.value = 48;
+      o.type = "sine"; o.frequency.value = N.C2;
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.4, t + 0.6);
-      o.connect(g); g.connect(master); o.start(t);
-      return { stop() {
-        const tt = now();
-        g.gain.cancelScheduledValues(tt); g.gain.setValueAtTime(g.gain.value, tt);
-        g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.6); o.stop(tt + 0.65);
-      }};
+      g.gain.linearRampToValueAtTime(0.32, t + 0.7);
+      o.connect(g); g.connect(master); if (reverb) g.connect(reverb);
+      o.start(t);
+      return { stop() { const tt = now(); g.gain.cancelScheduledValues(tt); g.gain.setValueAtTime(g.gain.value, tt); g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.7); o.stop(tt + 0.75); } };
     },
-    electric() { // short zappy discharge, fades fast
+    electric() { // gentle shimmer instead of harsh zap
       const t = now();
+      [N.G4, N.C5, N.E5].forEach((f, i) => bell(t + i * 0.05, f * (1 + rand(-0.01, 0.01)), 0.14));
       const o = ac.createOscillator(), g = ac.createGain();
-      o.type = "sawtooth";
-      o.frequency.setValueAtTime(rand(420, 620), t);
-      o.frequency.exponentialRampToValueAtTime(rand(80, 140), t + 0.18);
-      const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 800; bp.Q.value = 4;
-      g.gain.setValueAtTime(0.3, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
-      o.connect(bp); bp.connect(g); g.connect(master); o.start(t); o.stop(t + 0.22);
-      // crackle
-      const src = ac.createBufferSource(); src.buffer = noiseBuf;
-      const hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 2000;
-      const ng = ac.createGain();
-      ng.gain.setValueAtTime(0.18, t);
-      ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
-      src.connect(hp); hp.connect(ng); ng.connect(master); src.start(t); src.stop(t + 0.13);
+      o.type = "sine"; o.frequency.setValueAtTime(N.A5, t);
+      o.frequency.exponentialRampToValueAtTime(N.A4, t + 0.25);
+      g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      o.connect(g); g.connect(master); if (reverb) g.connect(reverb); o.start(t); o.stop(t + 0.27);
     },
-    surround() {
-      const t = now();
-      [N.C3, N.Eb3, N.G3, N.Bb3].forEach(f => {
-        const o = ac.createOscillator(), g = ac.createGain();
-        o.type = "sine"; o.frequency.value = f;
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(0.13, t + 0.1);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
-        o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.95);
-      });
-    },
+    surround() { const t = now(); [N.C4, N.E4, N.G4, N.C5].forEach(f => bell(t, f, 0.12)); },
     whoosh() {
       const t = now();
       const src = ac.createBufferSource(); src.buffer = noiseBuf;
       const lp = ac.createBiquadFilter(); lp.type = "lowpass";
       lp.frequency.setValueAtTime(300, t);
-      lp.frequency.exponentialRampToValueAtTime(2500, t + 0.3);
-      lp.frequency.exponentialRampToValueAtTime(300, t + 0.6);
+      lp.frequency.exponentialRampToValueAtTime(1800, t + 0.35);
+      lp.frequency.exponentialRampToValueAtTime(300, t + 0.7);
       const g = ac.createGain();
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.32, t + 0.1);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-      src.connect(lp); lp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.62);
+      g.gain.exponentialRampToValueAtTime(0.22, t + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
+      src.connect(lp); lp.connect(g); g.connect(master); src.start(t); src.stop(t + 0.72);
     }
   };
   const fxApi = {};
   for (const k in reactions) fxApi[k] = function () { return started ? reactions[k]() : null; };
 
-  // randomize the groove
+  // keep it zen — randomize the bell melody & light percussion only
   function randomizeRhythm() {
-    const density = rand(0.3, 0.7);
     for (let i = 0; i < 16; i++) {
-      pat.kick[i]  = (i % 4 === 0) ? 1 : (Math.random() < 0.18 ? 1 : 0);
-      pat.snare[i] = (i === 4 || i === 12) ? 1 : (Math.random() < 0.06 ? 1 : 0);
-      pat.hat[i]   = (i % 2 === 0) ? 1 : (Math.random() < 0.25 ? 1 : 0);
-      pat.bass[i]  = (i % 2 === 0) ? (Math.random() < 0.85 ? pick(scale) : 0) : (Math.random() < 0.2 ? pick(scale) : 0);
-      pat.lead[i]  = (Math.random() < density * 0.4) ? pick(leadScale) : 0;
+      pat.bell[i] = (Math.random() < 0.35) ? pick(bellScale) : 0;
+      pat.hat[i]  = (i === 4 || i === 12) ? 1 : (Math.random() < 0.08 ? 1 : 0);
+      pat.kick[i] = (i === 0 || i === 8) ? 1 : (Math.random() < 0.08 ? 1 : 0);
     }
-    pat.kick[0] = 1; // keep a downbeat
+    pat.bell[0] = pick(bellScale);
   }
 
   function setMuted(m) { muted = m; if (master) master.gain.linearRampToValueAtTime(m ? 0 : targetGain, now() + 0.05); }
 
   return {
-    init, resume, now, fx: fxApi, kick, snare, hat, bass, lead, pat, randomizeRhythm,
+    init, resume, now, fx: fxApi, kick, hat, bass, bell, pad, pat, chordProg, bassRoots, randomizeRhythm,
     get started() { return started; }, setMuted, get muted() { return muted; }
   };
 })();
 
 // ============================================================================
-// SEQUENCER — 128 BPM, pattern-driven
+// SEQUENCER — 84 BPM, pattern + chord/pad per bar
 // ============================================================================
-const SIXTEENTH = 60 / 128 / 4;
+const BPM = 84;
+const SIXTEENTH = 60 / BPM / 4;
 const Sequencer = (function () {
   let step = 0, bar = 0, nextStepTime = 0, started = false;
-  const lookahead = 0.12;
+  const lookahead = 0.14;
   let onBeat = null, onBar = null, onEightBars = null;
   const pending = [];
-  function start() { if (started || !Audio.started) return; started = true; step = 0; bar = 0; nextStepTime = Audio.now() + 0.08; }
-  function scheduleStep(s, t) {
+  function start() { if (started || !Audio.started) return; started = true; step = 0; bar = 0; nextStepTime = Audio.now() + 0.1; }
+  function scheduleStep(s, b, t) {
     const p = Audio.pat;
-    if (p.kick[s])  Audio.kick(t);
-    if (p.snare[s]) Audio.snare(t);
-    if (p.hat[s])   Audio.hat(t);
-    if (p.bass[s])  Audio.bass(t, p.bass[s]);
-    if (p.lead[s])  Audio.lead(t, p.lead[s]);
-    if (s % 4 === 0) pending.push({ time: t, step: s, bar });
+    if (p.kick[s]) Audio.kick(t);
+    if (p.hat[s])  Audio.hat(t);
+    if (p.bell[s]) Audio.bell(t, p.bell[s], 0.2);
+    if (s === 0) { Audio.pad(t, Audio.chordProg[b % 4]); Audio.bass(t, Audio.bassRoots[b % 4]); }
+    if (s === 8) Audio.bass(t, Audio.bassRoots[b % 4]);
+    if (s % 4 === 0) pending.push({ time: t, step: s, bar: b });
   }
   function tick() {
     if (!started) return;
     const t = Audio.now();
     while (nextStepTime < t + lookahead) {
-      scheduleStep(step, nextStepTime);
+      scheduleStep(step, bar, nextStepTime);
       nextStepTime += SIXTEENTH; step++;
       if (step >= 16) { step = 0; bar++; }
     }
@@ -411,12 +395,12 @@ const Sequencer = (function () {
 })();
 
 // ============================================================================
-// PARTICLE POOL
+// PARTICLES (pastel, visible on white)
 // ============================================================================
 const PARTICLE_MAX = 360;
 const particles = [];
 for (let i = 0; i < PARTICLE_MAX; i++)
-  particles.push({ active:false,x:0,y:0,vx:0,vy:0,life:0,maxLife:1,size:3,hue:0,sat:100,lum:60,rot:0,vrot:0,grav:0.04,decel:0.92 });
+  particles.push({ active:false,x:0,y:0,vx:0,vy:0,life:0,maxLife:1,size:3,hue:0,sat:100,lum:60,rot:0,vrot:0,grav:0.05,decel:0.93 });
 let pcur = 0;
 function spawnParticle(x, y, hue, opts) {
   let p = null;
@@ -426,22 +410,19 @@ function spawnParticle(x, y, hue, opts) {
   }
   if (!p) { p = particles[pcur]; pcur = (pcur + 1) % PARTICLE_MAX; }
   opts = opts || {};
-  const ang = rand(0, TAU), speed = rand(opts.minSpd || 1.5, opts.maxSpd || 8);
+  const ang = rand(0, TAU), speed = rand(opts.minSpd || 1.2, opts.maxSpd || 6);
   p.active = true; p.x = x; p.y = y;
   p.vx = Math.cos(ang) * speed; p.vy = Math.sin(ang) * speed;
-  p.maxLife = rand(opts.minLife || 0.5, opts.maxLife || 1.2); p.life = p.maxLife;
+  p.maxLife = rand(opts.minLife || 0.6, opts.maxLife || 1.3); p.life = p.maxLife;
   p.size = opts.size || (Math.random() < 0.5 ? 3 : 4);
-  p.hue = wrapHue(hue + rand(-30, 30));
-  p.sat = rand(85, 100); p.lum = rand(55, 78);
-  p.rot = rand(0, TAU); p.vrot = rand(-0.35, 0.35);
-  p.grav = opts.grav != null ? opts.grav : 0.04;
-  p.decel = opts.decel || 0.92;
+  p.hue = wrapHue(hue + rand(-24, 24));
+  p.sat = rand(55, 78); p.lum = rand(60, 74); // pastel, mid-light
+  p.rot = rand(0, TAU); p.vrot = rand(-0.3, 0.3);
+  p.grav = opts.grav != null ? opts.grav : 0.08;
+  p.decel = opts.decel || 0.93;
 }
 function burst(x, y, hue, n, opts) { for (let i = 0; i < n; i++) spawnParticle(x, y, hue, opts); }
-function splash(x, y, hue, n) { // bigger, slower, liquid-like droplets
-  for (let i = 0; i < n; i++) spawnParticle(x, y, hue, { minSpd:1, maxSpd:5.5, minLife:0.7, maxLife:1.5, size:(Math.random()<0.5?4:5), grav:0.09, decel:0.9 });
-}
-function burst(x, y, hue, n) { for (let i = 0; i < n; i++) spawnParticle(x, y, hue); }
+function splashFx(x, y, hue, n) { for (let i = 0; i < n; i++) spawnParticle(x, y, hue, { minSpd:0.8, maxSpd:4.5, minLife:0.8, maxLife:1.6, size:(Math.random()<0.5?4:5), grav:0.12, decel:0.9 }); }
 function updateParticles(dt) {
   for (let i = 0; i < PARTICLE_MAX; i++) {
     const p = particles[i]; if (!p.active) continue;
@@ -453,28 +434,28 @@ function drawParticles() {
   for (let i = 0; i < PARTICLE_MAX; i++) {
     const p = particles[i]; if (!p.active) continue;
     xctx.save();
-    xctx.globalAlpha = clamp(p.life / p.maxLife, 0, 1);
+    xctx.globalAlpha = clamp(p.life / p.maxLife, 0, 1) * 0.9;
     xctx.translate(p.x, p.y); xctx.rotate(p.rot);
     const col = "hsl(" + p.hue + "," + p.sat + "%," + p.lum + "%)";
-    xctx.fillStyle = col; xctx.shadowBlur = 6; xctx.shadowColor = col;
+    xctx.fillStyle = col; xctx.shadowBlur = 5; xctx.shadowColor = col;
     xctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
     xctx.restore();
   }
 }
 
 // ============================================================================
-// SHAPES / RINGS overlays
+// SHAPES / RINGS overlays (pastel)
 // ============================================================================
 const shapes = [];
-function addShape(x, y, type, hue, baseSize) { shapes.push({ x, y, type, hue, life: 0.4, maxLife: 0.4, baseSize: baseSize || 70 }); }
+function addShape(x, y, type, hue, baseSize) { shapes.push({ x, y, type, hue, life: 0.45, maxLife: 0.45, baseSize: baseSize || 70 }); }
 function updateShapes(dt) { for (let i = shapes.length-1; i>=0; i--) { shapes[i].life -= dt; if (shapes[i].life <= 0) shapes.splice(i,1); } }
 function drawShapes() {
   for (const s of shapes) {
-    const t = 1 - s.life / s.maxLife, scale = lerp(0, 1.5, easeOutCubic(t)) * s.baseSize, alpha = 1 - t;
+    const t = 1 - s.life / s.maxLife, scale = lerp(0, 1.5, easeOutCubic(t)) * s.baseSize, alpha = (1 - t) * 0.8;
     const sides = s.type === "triangle" ? 3 : s.type === "hexagon" ? 6 : 4, rot = -Math.PI/2;
     xctx.save(); xctx.globalAlpha = alpha;
-    xctx.strokeStyle = "hsl(" + s.hue + ",100%,65%)"; xctx.lineWidth = 2;
-    xctx.shadowBlur = 12; xctx.shadowColor = "hsl(" + s.hue + ",100%,65%)";
+    xctx.strokeStyle = "hsl(" + s.hue + ",60%,62%)"; xctx.lineWidth = 2;
+    xctx.shadowBlur = 10; xctx.shadowColor = "hsl(" + s.hue + ",60%,70%)";
     xctx.beginPath();
     for (let i = 0; i <= sides; i++) { const a = rot + (i/sides)*TAU; const px = s.x+Math.cos(a)*scale, py = s.y+Math.sin(a)*scale; if (i===0) xctx.moveTo(px,py); else xctx.lineTo(px,py); }
     xctx.stroke(); xctx.restore();
@@ -486,17 +467,18 @@ function updateRings(dt) { for (let i = rings.length-1; i>=0; i--) { rings[i].li
 function drawRings() {
   for (const r of rings) {
     const t = 1 - r.life / r.maxLife, radius = lerp(0, r.maxR, easeOutCubic(t));
-    xctx.save(); xctx.globalAlpha = (1 - t) * 0.8;
-    xctx.strokeStyle = "hsl(" + r.hue + ",100%,70%)"; xctx.lineWidth = 2;
-    xctx.shadowBlur = 14; xctx.shadowColor = "hsl(" + r.hue + ",100%,70%)";
+    xctx.save(); xctx.globalAlpha = (1 - t) * 0.6;
+    xctx.strokeStyle = "hsl(" + r.hue + ",55%,65%)"; xctx.lineWidth = 2;
+    xctx.shadowBlur = 12; xctx.shadowColor = "hsl(" + r.hue + ",55%,72%)";
     xctx.beginPath(); xctx.arc(r.x, r.y, radius, 0, TAU); xctx.stroke(); xctx.restore();
   }
 }
 
 // ============================================================================
-// BLOB — permanent (liquid) or electric (temporary, vibrating)
+// BLOB — pastel, gravity-aware, malleable
 // ============================================================================
 const MAX_BLOBS = 14, MIN_BLOBS = 8;
+const GRAVITY = 10;            // gentle downward pull
 let globalPulseSpeed = 1;
 
 class Blob {
@@ -508,52 +490,52 @@ class Blob {
     for (let i = 0; i < this.points; i++) {
       this.angles.push((i / this.points) * TAU);
       this.offsets.push(rand(0, TAU));
-      this.speeds.push(rand(0.7, 1.8));
-      this.amps.push(rand(0.10, 0.22));
+      this.speeds.push(rand(0.6, 1.5));
+      this.amps.push(rand(0.12, 0.26)); // a touch more wobble = malleable
     }
-    this.vx = rand(-0.4, 0.4); this.vy = rand(-0.4, 0.4);
+    this.vx = rand(-0.3, 0.3); this.vy = rand(-0.3, 0.3);
     this.ax = 0; this.ay = 0;
     this.wanderAng = rand(0, TAU);
-    this.pulsePhase = rand(0, TAU); this.pulseSpeed = rand(0.7, 1.1);
+    this.pulsePhase = rand(0, TAU); this.pulseSpeed = rand(0.5, 0.9);
     this.glowIntensity = 0; this.scaleAnim = 1; this.bounce = null; this.beatPulse = 0;
     this.starAmount = 0; this.starTimer = 0; this.hueShiftAnim = 0;
     this.circleMorph = 0; this.circleMorphTimer = 0;
     this.frozen = false; this.magnetTarget = null;
-    // electric temp state
     this.electric = !!electric;
     this.maxLife = electric ? rand(0.5, 1.0) : Infinity;
     this.life = this.maxLife;
     this.vibX = 0; this.vibY = 0;
-    if (electric) { this.triggerBounce(1.3, 0.3); this.glowIntensity = 1; }
+    if (electric) { this.triggerBounce(1.25, 0.3); this.glowIntensity = 1; }
   }
   get radius() { return this.baseRadius * this.scaleAnim * (1 + this.beatPulse); }
   triggerBounce(peak, dur) { this.bounce = { t: 0, dur: dur || 0.32, peak: peak || 1.4 }; this.glowIntensity = 1; }
-  surround() { this.starAmount = 1; this.starTimer = 2.0; this.hueShiftAnim = 180; this.glowIntensity = 1; this.triggerBounce(1.5, 0.5); }
+  surround() { this.starAmount = 1; this.starTimer = 2.0; this.hueShiftAnim = 120; this.glowIntensity = 1; this.triggerBounce(1.45, 0.5); }
   morphCircle() { this.circleMorph = 1; this.circleMorphTimer = 0.8; }
 
   integrate(dt) {
     if (this.frozen) return;
     if (this.electric) {
-      // buzz around its spot — sharp random jolts (electric discharge)
-      this.vx += rand(-1, 1) * 2.4; this.vy += rand(-1, 1) * 2.4;
-      this.vibX = rand(-1, 1) * this.baseRadius * 0.18;
-      this.vibY = rand(-1, 1) * this.baseRadius * 0.18;
+      this.vx += rand(-1, 1) * 2.0; this.vy += rand(-1, 1) * 2.0;
+      this.vibX = rand(-1, 1) * this.baseRadius * 0.15;
+      this.vibY = rand(-1, 1) * this.baseRadius * 0.15;
     } else {
-      this.wanderAng += rand(-0.5, 0.5) * dt * 6;
-      this.ax += Math.cos(this.wanderAng) * 8;
-      this.ay += Math.sin(this.wanderAng) * 8;
+      // gentle wander + gravity -> living, settling, malleable motion
+      this.wanderAng += rand(-0.5, 0.5) * dt * 5;
+      this.ax += Math.cos(this.wanderAng) * 5;
+      this.ay += Math.sin(this.wanderAng) * 5 + GRAVITY;
     }
     if (this.magnetTarget) { this.ax += (this.magnetTarget.x - this.x) * 6; this.ay += (this.magnetTarget.y - this.y) * 6; }
     this.vx += this.ax * dt; this.vy += this.ay * dt;
-    this.vx *= this.electric ? 0.7 : 0.94; this.vy *= this.electric ? 0.7 : 0.94;
-    const sp = Math.hypot(this.vx, this.vy), MAX = this.electric ? 4 : 2.4;
+    this.vx *= this.electric ? 0.7 : 0.95; this.vy *= this.electric ? 0.7 : 0.95;
+    const sp = Math.hypot(this.vx, this.vy), MAX = this.electric ? 4 : 3;
     if (sp > MAX) { this.vx = this.vx/sp*MAX; this.vy = this.vy/sp*MAX; }
     this.x += this.vx; this.y += this.vy; this.ax = 0; this.ay = 0;
-    const r = this.baseRadius * 0.6, k = 0.6;
-    if (this.x < r) this.vx += (r - this.x) * k * dt * 8;
-    if (this.x > W - r) this.vx -= (this.x - (W - r)) * k * dt * 8;
-    if (this.y < r) this.vy += (r - this.y) * k * dt * 8;
-    if (this.y > H - r) this.vy -= (this.y - (H - r)) * k * dt * 8;
+    // soft springy walls (bounce like a liquid meniscus)
+    const r = this.baseRadius * 0.7, k = 0.9;
+    if (this.x < r) { this.vx += (r - this.x) * k * dt * 8; this.vx *= 0.96; }
+    if (this.x > W - r) { this.vx -= (this.x - (W - r)) * k * dt * 8; this.vx *= 0.96; }
+    if (this.y < r) { this.vy += (r - this.y) * k * dt * 8; }
+    if (this.y > H - r) { this.vy -= (this.y - (H - r)) * k * dt * 10; this.vy *= 0.9; }
   }
   animate(dt, time) {
     if (this.electric) this.life -= dt;
@@ -567,9 +549,9 @@ class Blob {
     this.glowIntensity *= Math.pow(0.05, dt);
     if (this.starTimer > 0) { this.starTimer -= dt;
       if (this.starTimer <= 0) { this.starAmount = 0; this.hueShiftAnim = 0; }
-      else if (this.starTimer < 0.4) { this.starAmount = this.starTimer/0.4; this.hueShiftAnim = 180*(this.starTimer/0.4); } }
+      else if (this.starTimer < 0.4) { this.starAmount = this.starTimer/0.4; this.hueShiftAnim = 120*(this.starTimer/0.4); } }
     if (this.circleMorphTimer > 0) { this.circleMorphTimer -= dt; this.circleMorph = this.circleMorphTimer <= 0 ? 0 : Math.min(1, this.circleMorphTimer/0.4); }
-    this.hue = wrapHue(this.hue + 0.3 * (dt * 60) * 0.16);
+    this.hue = wrapHue(this.hue + 0.3 * (dt * 60) * 0.12); // slow, gentle hue drift
   }
   getControlPoints(time, ox, oy) {
     const pts = [], r = this.radius, cx = this.x + (ox||0), cy = this.y + (oy||0);
@@ -578,9 +560,8 @@ class Blob {
       const amp = this.amps[i] * (1 - this.circleMorph);
       const wob = Math.sin(time * this.speeds[i] + this.offsets[i]) * amp;
       let rr = r * (1 + wob);
-      if (this.starAmount > 0) rr *= (i % 2 === 0) ? 1 + 0.6*this.starAmount : 1 - 0.25*this.starAmount;
-      // electric spike jitter per point
-      if (this.electric) rr *= 1 + rand(-0.18, 0.18);
+      if (this.starAmount > 0) rr *= (i % 2 === 0) ? 1 + 0.5*this.starAmount : 1 - 0.2*this.starAmount;
+      if (this.electric) rr *= 1 + rand(-0.15, 0.15);
       pts.push({ x: cx + Math.cos(baseAng) * rr, y: cy + Math.sin(baseAng) * rr });
     }
     return pts;
@@ -590,17 +571,14 @@ class Blob {
     const pts = this.getControlPoints(time, ox, oy), n = pts.length, r = this.radius;
     let drawHue = wrapHue(this.hue + this.hueShiftAnim);
     let alpha = 1;
-    if (this.electric) {
-      // electric look: brighter, bluish flicker, fade as it dies
-      drawHue = wrapHue(drawHue + 10);
-      alpha = (Math.random() < 0.12 ? 0.4 : 1) * clamp(this.life / this.maxLife + 0.2, 0, 1);
-    }
+    if (this.electric) alpha = (Math.random() < 0.12 ? 0.5 : 1) * clamp(this.life / this.maxLife + 0.2, 0, 1);
     const cx = this.x + ox, cy = this.y + oy;
-    const grad = fctx.createRadialGradient(cx, cy, r*0.1, cx, cy, r*1.25);
-    const litCore = this.electric ? 90 : 72;
-    grad.addColorStop(0, "hsl(" + drawHue + ",100%," + litCore + "%)");
-    grad.addColorStop(0.6, "hsl(" + drawHue + ",95%,58%)");
-    grad.addColorStop(1, "hsl(" + drawHue + ",90%,48%)");
+    const grad = fctx.createRadialGradient(cx - r*0.25, cy - r*0.25, r*0.1, cx, cy, r*1.2);
+    // pastel: high lightness, soft saturation
+    const sat = this.electric ? 72 : 60;
+    grad.addColorStop(0,   "hsl(" + drawHue + "," + sat + "%," + (this.electric ? 90 : 86) + "%)");
+    grad.addColorStop(0.55,"hsl(" + drawHue + "," + sat + "%,78%)");
+    grad.addColorStop(1,   "hsl(" + drawHue + "," + (sat + 6) + "%,70%)");
     fctx.save();
     fctx.globalAlpha = alpha;
     fctx.fillStyle = grad;
@@ -612,17 +590,17 @@ class Blob {
   }
 }
 
-// fluid forces (cohesion + separation) — tuned so they DON'T fill the screen
+// fluid forces — more cohesion + softer separation => they interact & merge (malleable)
 function applyFluidForces() {
   for (let i = 0; i < blobs.length; i++) {
     for (let j = i + 1; j < blobs.length; j++) {
       const a = blobs[i], b = blobs[j];
       let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001;
       const ux = dx/d, uy = dy/d, sumR = a.baseRadius + b.baseRadius;
-      const cohRange = sumR + 90;          // shorter reach
-      if (d < cohRange) { const f = 3 * (1 - d/cohRange); a.ax += ux*f; a.ay += uy*f; b.ax -= ux*f; b.ay -= uy*f; }
-      const sep = sumR * 0.95;             // firmer separation -> spread out
-      if (d < sep) { const f = 55 * (1 - d/sep); a.ax -= ux*f; a.ay -= uy*f; b.ax += ux*f; b.ay += uy*f; }
+      const cohRange = sumR + 140;
+      if (d < cohRange) { const f = 5 * (1 - d/cohRange); a.ax += ux*f; a.ay += uy*f; b.ax -= ux*f; b.ay -= uy*f; }
+      const sep = sumR * 0.8;          // allow more overlap -> squishy merge
+      if (d < sep) { const f = 34 * (1 - d/sep); a.ax -= ux*f; a.ay -= uy*f; b.ax += ux*f; b.ay += uy*f; }
     }
   }
 }
@@ -636,20 +614,18 @@ function spawnInitialBlobs() {
   blobs = [];
   const count = randInt(MIN_BLOBS, 11), baseHue = rand(0, 360);
   for (let i = 0; i < count; i++)
-    blobs.push(new Blob(rand(80, W-80), rand(100, H-80), rand(30, 72), wrapHue(baseHue + rand(-60, 60))));
+    blobs.push(new Blob(rand(80, W-80), rand(80, H-180), rand(32, 70), wrapHue(baseHue + rand(-70, 70))));
   updateBlobCountHUD();
 }
 function addBlob(x, y, hue) {
   if (permanentCount() >= MAX_BLOBS) return null;
-  const b = new Blob(x, y, rand(34, 74), hue == null ? rand(0,360) : hue);
-  b.triggerBounce(1.4, 0.4); b.glowIntensity = 1;
+  const b = new Blob(x, y, rand(34, 72), hue == null ? rand(0,360) : hue);
+  b.triggerBounce(1.35, 0.4); b.glowIntensity = 1;
   blobs.push(b); updateBlobCountHUD(); return b;
 }
 function spawnElectric(x, y, hue, count) {
-  for (let i = 0; i < count; i++) {
-    const e = new Blob(x + rand(-30, 30), y + rand(-30, 30), rand(20, 40), wrapHue(hue + rand(-20, 20)), true);
-    blobs.push(e);
-  }
+  for (let i = 0; i < count; i++)
+    blobs.push(new Blob(x + rand(-30, 30), y + rand(-30, 30), rand(18, 38), wrapHue(hue + rand(-20, 20)), true));
 }
 function nearestBlob(x, y, permanentOnly) {
   let best = null, bd = Infinity;
@@ -663,22 +639,22 @@ function updateBlobCountHUD() { document.getElementById("blobCount").textContent
 // ============================================================================
 let bgFlash = 0;
 let cascadeQueue = [], cascadeClock = 0;
-function startCascade() { cascadeQueue = []; blobs.forEach((b, i) => { if (!b.electric) cascadeQueue.push({ blob: b, time: i * 0.1 }); }); cascadeClock = 0; }
+function startCascade() { cascadeQueue = []; blobs.forEach((b, i) => { if (!b.electric) cascadeQueue.push({ blob: b, time: i * 0.14 }); }); cascadeClock = 0; }
 function updateCascade(dt) {
   if (!cascadeQueue.length) return;
   cascadeClock += dt;
   while (cascadeQueue.length && cascadeQueue[0].time <= cascadeClock) {
     const it = cascadeQueue.shift();
-    if (blobs.includes(it.blob)) { burst(it.blob.x, it.blob.y, it.blob.hue, 36); it.blob.triggerBounce(1.3, 0.3); it.blob.glowIntensity = 1; }
+    if (blobs.includes(it.blob)) { burst(it.blob.x, it.blob.y, it.blob.hue, 24); it.blob.triggerBounce(1.25, 0.35); it.blob.glowIntensity = 1; }
   }
 }
 const beatDot = document.getElementById("beatDot");
-Sequencer.onBeat = function () { for (const b of blobs) b.beatPulse = 0.1; bgFlash = 0.035; beatDot.classList.add("on"); setTimeout(() => beatDot.classList.remove("on"), 90); };
-Sequencer.onBar = function () { const perm = blobs.filter(b => !b.electric); if (perm.length) pick(perm).hue = wrapHue(pick(perm).hue + 60); };
+Sequencer.onBeat = function () { for (const b of blobs) b.beatPulse = 0.06; bgFlash = 0.04; beatDot.classList.add("on"); setTimeout(() => beatDot.classList.remove("on"), 110); };
+Sequencer.onBar = function () { const perm = blobs.filter(b => !b.electric); if (perm.length) { const b = pick(perm); b.hue = wrapHue(b.hue + 40); } };
 Sequencer.onEightBars = function (bar) { if (bar !== 0) startCascade(); };
 
 // ============================================================================
-// Trail
+// Trail (pastel)
 // ============================================================================
 const trail = []; const TRAIL_MAX = 30;
 function addTrailPoint(x, y) { trail.push({ x, y, life: 0.5 }); if (trail.length > TRAIL_MAX) trail.shift(); }
@@ -686,9 +662,9 @@ function updateTrail(dt) { for (let i = trail.length-1; i>=0; i--) { trail[i].li
 function drawTrail(hue) {
   if (trail.length < 2) return;
   xctx.save(); xctx.lineWidth = 3; xctx.lineCap = "round"; xctx.lineJoin = "round";
-  xctx.shadowBlur = 8; xctx.shadowColor = "hsl(" + hue + ",100%,65%)";
+  xctx.shadowBlur = 8; xctx.shadowColor = "hsl(" + hue + ",55%,70%)";
   for (let i = 1; i < trail.length; i++) {
-    xctx.globalAlpha = trail[i].life / 0.5; xctx.strokeStyle = "hsl(" + hue + ",100%,65%)";
+    xctx.globalAlpha = (trail[i].life / 0.5) * 0.8; xctx.strokeStyle = "hsl(" + hue + ",55%,66%)";
     xctx.beginPath(); xctx.moveTo(trail[i-1].x, trail[i-1].y); xctx.lineTo(trail[i].x, trail[i].y); xctx.stroke();
   }
   xctx.restore();
@@ -698,24 +674,20 @@ function drawTrail(hue) {
 // ACTIONS
 // ============================================================================
 const Actions = {
-  tap(x, y) { // create a blob that joins the fluid
+  tap(x, y) {
     const nb = addBlob(x, y, null);
-    if (nb) { burst(x, y, nb.hue, 24, { maxSpd: 5 }); Audio.fx.create(); }
-    else { const b = nearestBlob(x, y, true); if (b) splash(b.x, b.y, b.hue, 40); Audio.fx.splash(); }
-    addShape(x, y, "diamond", nb ? nb.hue : 180, 50);
+    if (nb) { burst(x, y, nb.hue, 20, { maxSpd: 4 }); Audio.fx.create(); }
+    else { const b = nearestBlob(x, y, true); if (b) splashFx(b.x, b.y, b.hue, 36); Audio.fx.splash(); }
+    addShape(x, y, "diamond", nb ? nb.hue : 200, 48);
   },
-  doubleTap(x, y) { // explode a blob into a liquid splash
+  doubleTap(x, y) {
     const b = nearestBlob(x, y, true);
     Audio.fx.splash();
-    if (b) {
-      splash(b.x, b.y, b.hue, 70);
-      addRing(b.x, b.y, b.baseRadius * 2.2, b.hue, 0.5);
-      const idx = blobs.indexOf(b); if (idx >= 0) blobs.splice(idx, 1);
-      updateBlobCountHUD();
-    }
+    if (b) { splashFx(b.x, b.y, b.hue, 64); addRing(b.x, b.y, b.baseRadius * 2.2, b.hue, 0.5);
+      const idx = blobs.indexOf(b); if (idx >= 0) blobs.splice(idx, 1); updateBlobCountHUD(); }
   },
   longPressStart(x, y) {
-    const nb = nearestBlob(x, y); addRing(x, y, 200, nb ? nb.hue : 200, 0.7);
+    const nb = nearestBlob(x, y); addRing(x, y, 200, nb ? nb.hue : 200, 0.8);
     globalPulseSpeed = 3;
     for (const b of blobs) if (!b.electric && dist(x, y, b.x, b.y) < 200) b.magnetTarget = { x, y };
   },
@@ -723,21 +695,20 @@ const Actions = {
     globalPulseSpeed = 1;
     for (const b of blobs) if (b.magnetTarget) {
       const ang = Math.atan2(b.y - y, b.x - x) || rand(0, TAU);
-      b.vx = Math.cos(ang) * rand(3, 6); b.vy = Math.sin(ang) * rand(3, 6);
-      b.magnetTarget = null; b.triggerBounce(1.25, 0.4);
+      b.vx = Math.cos(ang) * rand(2.5, 5); b.vy = Math.sin(ang) * rand(2.5, 5);
+      b.magnetTarget = null; b.triggerBounce(1.2, 0.4);
     }
   },
-  surround(cx, cy, b) { b.surround(); burst(b.x, b.y, b.hue, 50); addRing(b.x, b.y, b.baseRadius*2, b.hue, 0.8); Audio.fx.surround(); },
-  // all drawn shapes -> electric vibrating blobs that vanish fast + zap sound
-  drawCircle(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(3, 5)); addShape(cx, cy, "hexagon", hue, 70); burst(cx, cy, hue, 18); Audio.fx.electric(); },
+  surround(cx, cy, b) { b.surround(); burst(b.x, b.y, b.hue, 40); addRing(b.x, b.y, b.baseRadius*2, b.hue, 0.9); Audio.fx.surround(); },
+  drawCircle(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(3, 5)); addShape(cx, cy, "hexagon", hue, 70); burst(cx, cy, hue, 14); Audio.fx.electric(); },
   drawTriangle(corners, hue) {
     let cx = 0, cy = 0; for (const c of corners) { cx += c.x; cy += c.y; } cx /= corners.length; cy /= corners.length;
     addShape(cx, cy, "triangle", hue, Math.max(dist(corners[0].x, corners[0].y, cx, cy), 80));
     for (const c of corners) spawnElectric(c.x, c.y, hue, 2);
-    burst(cx, cy, hue, 18); Audio.fx.electric();
+    burst(cx, cy, hue, 14); Audio.fx.electric();
   },
-  drawSquare(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(4, 6)); addShape(cx, cy, "diamond", hue, 80); burst(cx, cy, hue, 20); Audio.fx.electric(); },
-  pinch(x, y, grow) { const b = nearestBlob(x, y, true); if (!b) return; b.baseRadius = clamp(b.baseRadius * (grow ? 1.04 : 0.96), 18, 160); Audio.fx.whoosh(); }
+  drawSquare(cx, cy, hue) { spawnElectric(cx, cy, hue, randInt(4, 6)); addShape(cx, cy, "diamond", hue, 80); burst(cx, cy, hue, 16); Audio.fx.electric(); },
+  pinch(x, y, grow) { const b = nearestBlob(x, y, true); if (!b) return; b.baseRadius = clamp(b.baseRadius * (grow ? 1.04 : 0.96), 18, 150); Audio.fx.whoosh(); }
 };
 
 // ============================================================================
@@ -748,9 +719,9 @@ const Gesture = (function () {
   let moved = false, maxMove = 0;
   const path = []; let pathLen = 0;
   let lpTimer = null, lpFired = false, lpDrone = null;
-  let pendingTap = null; // {time,x,y,timer}
+  let pendingTap = null;
   let pinchActive = false, pinchStartDist = 0;
-  const TAP_TIME = 220, TAP_MOVE = 10, DOUBLE_GAP = 280, LP_TIME = 600, TAP_RESOLVE = 200;
+  const TAP_TIME = 220, TAP_MOVE = 10, DOUBLE_GAP = 300, LP_TIME = 600, TAP_RESOLVE = 200;
 
   function reset() { path.length = 0; pathLen = 0; moved = false; maxMove = 0; lpFired = false; if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } }
 
@@ -764,10 +735,9 @@ const Gesture = (function () {
     const t = touches[0];
     active = true; startX = lastX = t.x; startY = lastY = t.y; startT = performance.now();
     reset(); path.push({ x: t.x, y: t.y }); addTrailPoint(t.x, t.y);
-    Audio.fx.touch(); // INSTANT feedback, zero latency
+    Audio.fx.touch();
     lpTimer = setTimeout(() => {
       if (active && maxMove < TAP_MOVE) {
-        // a 2nd touch turning into hold cancels any pending single-tap
         if (pendingTap) { clearTimeout(pendingTap.timer); pendingTap = null; }
         lpFired = true; Actions.longPressStart(startX, startY); lpDrone = Audio.fx.longPress();
       }
@@ -797,8 +767,7 @@ const Gesture = (function () {
     if (!moved && dt < TAP_TIME) {
       const nowT = performance.now(), tx = startX, ty = startY;
       if (pendingTap && nowT - pendingTap.time < DOUBLE_GAP && dist(pendingTap.x, pendingTap.y, tx, ty) < 50) {
-        clearTimeout(pendingTap.timer); pendingTap = null;
-        Actions.doubleTap(tx, ty); // no single-tap blob was created -> clean splash
+        clearTimeout(pendingTap.timer); pendingTap = null; Actions.doubleTap(tx, ty);
       } else {
         const pt = { time: nowT, x: tx, y: ty, timer: null };
         pt.timer = setTimeout(() => { Actions.tap(tx, ty); pendingTap = null; }, TAP_RESOLVE);
@@ -814,22 +783,17 @@ const Gesture = (function () {
   function classifyPath() {
     const c = centroidOf(path);
     const nb = nearestBlob(c.x, c.y, true), hue = nb ? nb.hue : rand(160, 320);
-    if (isClosed() && windsAround(c)) {
-      for (const b of blobs) if (!b.electric && pointInPath(b.x, b.y)) { Actions.surround(c.x, c.y, b); return; }
-    }
+    if (isClosed() && windsAround(c)) { for (const b of blobs) if (!b.electric && pointInPath(b.x, b.y)) { Actions.surround(c.x, c.y, b); return; } }
     const corners = findCorners();
     if (isCircular() && pathLen >= 150 && pathLen <= 900) { Actions.drawCircle(c.x, c.y, hue); return; }
     if (corners.length === 3) { Actions.drawTriangle(corners, hue); return; }
     if (corners.length === 4) { Actions.drawSquare(c.x, c.y, hue); return; }
     if (isCircular()) Actions.drawCircle(c.x, c.y, hue);
-    else { spawnElectric(c.x, c.y, hue, 2); Audio.fx.electric(); } // any other scribble -> small zap
+    else { spawnElectric(c.x, c.y, hue, 2); Audio.fx.electric(); }
   }
   function windsAround(c) {
     let total = 0;
-    for (let i = 1; i < path.length; i++) {
-      let da = Math.atan2(path[i].y-c.y, path[i].x-c.x) - Math.atan2(path[i-1].y-c.y, path[i-1].x-c.x);
-      while (da > Math.PI) da -= TAU; while (da < -Math.PI) da += TAU; total += da;
-    }
+    for (let i = 1; i < path.length; i++) { let da = Math.atan2(path[i].y-c.y, path[i].x-c.x) - Math.atan2(path[i-1].y-c.y, path[i-1].x-c.x); while (da > Math.PI) da -= TAU; while (da < -Math.PI) da += TAU; total += da; }
     return Math.abs(total) > Math.PI * 1.5;
   }
   function pointInPath(px, py) {
@@ -878,11 +842,7 @@ function tList(e) {
 }
 fx.addEventListener("touchstart", (e) => { e.preventDefault(); Gesture.onStart(tList(e)); }, { passive: false });
 fx.addEventListener("touchmove", (e) => { e.preventDefault(); Gesture.onMove(tList(e)); }, { passive: false });
-fx.addEventListener("touchend", (e) => {
-  e.preventDefault();
-  const rem = []; for (let i = 0; i < e.touches.length; i++) rem.push({ x: e.touches[i].clientX, y: e.touches[i].clientY });
-  Gesture.onEnd(rem);
-}, { passive: false });
+fx.addEventListener("touchend", (e) => { e.preventDefault(); const rem = []; for (let i = 0; i < e.touches.length; i++) rem.push({ x: e.touches[i].clientX, y: e.touches[i].clientY }); Gesture.onEnd(rem); }, { passive: false });
 fx.addEventListener("touchcancel", () => Gesture.onEnd([]), { passive: false });
 let mouseDown = false;
 fx.addEventListener("mousedown", (e) => { mouseDown = true; Gesture.onStart([{ x: e.clientX, y: e.clientY }]); });
@@ -890,7 +850,7 @@ fx.addEventListener("mousemove", (e) => { if (mouseDown) Gesture.onMove([{ x: e.
 window.addEventListener("mouseup", () => { if (mouseDown) { mouseDown = false; Gesture.onEnd([]); } });
 
 // ============================================================================
-// Controls: start gate, mute, random beat, random blobs, auto-play
+// Controls
 // ============================================================================
 const startEl = document.getElementById("start");
 function unlock() { Audio.init(); Audio.resume(); Sequencer.start(); startEl.classList.add("hidden"); setTimeout(() => { if (startEl.parentNode) startEl.parentNode.removeChild(startEl); }, 600); }
@@ -903,33 +863,27 @@ muteBtn.addEventListener("click", (e) => { e.stopPropagation(); Audio.init(); Au
 muteBtn.addEventListener("touchstart", (e) => e.stopPropagation());
 
 const rhythmBtn = document.getElementById("rhythmBtn");
-function doRhythm(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start(); Audio.randomizeRhythm();
-  rhythmBtn.classList.add("on"); setTimeout(() => rhythmBtn.classList.remove("on"), 180); }
+function doRhythm(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start(); Audio.randomizeRhythm(); rhythmBtn.classList.add("on"); setTimeout(() => rhythmBtn.classList.remove("on"), 200); }
 rhythmBtn.addEventListener("click", doRhythm);
 rhythmBtn.addEventListener("touchstart", (e) => { e.preventDefault(); doRhythm(e); }, { passive: false });
 
 const blobsBtn = document.getElementById("blobsBtn");
-function doBlobs(e) { if (e) e.stopPropagation(); spawnInitialBlobs();
-  for (const b of blobs) { b.triggerBounce(1.4, 0.4); burst(b.x, b.y, b.hue, 16); }
-  blobsBtn.classList.add("on"); setTimeout(() => blobsBtn.classList.remove("on"), 180); }
+function doBlobs(e) { if (e) e.stopPropagation(); spawnInitialBlobs(); for (const b of blobs) { b.triggerBounce(1.3, 0.4); burst(b.x, b.y, b.hue, 12); } blobsBtn.classList.add("on"); setTimeout(() => blobsBtn.classList.remove("on"), 200); }
 blobsBtn.addEventListener("click", doBlobs);
 blobsBtn.addEventListener("touchstart", (e) => { e.preventDefault(); doBlobs(e); }, { passive: false });
 
-// auto-play mode
 let autoOn = false, autoAccum = 0, autoNext = 0;
 const autoBtn = document.getElementById("autoBtn");
-function toggleAuto(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start();
-  autoOn = !autoOn; autoBtn.classList.toggle("on", autoOn); autoAccum = 0; autoNext = 0; }
+function toggleAuto(e) { if (e) e.stopPropagation(); Audio.init(); Audio.resume(); Sequencer.start(); autoOn = !autoOn; autoBtn.classList.toggle("on", autoOn); autoAccum = 0; autoNext = 0; }
 autoBtn.addEventListener("click", toggleAuto);
 autoBtn.addEventListener("touchstart", (e) => { e.preventDefault(); toggleAuto(e); }, { passive: false });
 
 function autoAction() {
-  const x = rand(60, W - 60), y = rand(90, H - 60);
-  const r = Math.random();
+  const x = rand(60, W - 60), y = rand(90, H - 120), r = Math.random();
   const hue = (nearestBlob(x, y, true) || {}).hue;
-  if (r < 0.42) Actions.tap(x, y);
-  else if (r < 0.6) Actions.doubleTap(x, y);
-  else if (r < 0.82) { Actions.drawCircle(x, y, hue == null ? rand(0,360) : hue); }
+  if (r < 0.46) Actions.tap(x, y);
+  else if (r < 0.62) Actions.doubleTap(x, y);
+  else if (r < 0.84) Actions.drawCircle(x, y, hue == null ? rand(0,360) : hue);
   else { const b = nearestBlob(x, y, true); if (b) Actions.surround(x, y, b); else Actions.tap(x, y); }
 }
 
@@ -943,31 +897,28 @@ function frame(nowMs) {
   let dt = (nowMs - lastTime) / 1000; lastTime = nowMs; if (dt > 0.05) dt = 0.05; time += dt;
   Sequencer.tick();
 
-  // auto-play
-  if (autoOn) { autoAccum += dt; if (autoAccum >= autoNext) { autoAction(); autoAccum = 0; autoNext = rand(0.3, 1.0); } }
+  if (autoOn) { autoAccum += dt; if (autoAccum >= autoNext) { autoAction(); autoAccum = 0; autoNext = rand(0.6, 1.6); } }
 
-  // physics
   applyFluidForces();
   for (const b of blobs) { b.integrate(dt); b.animate(dt, time); }
-  // reap dead electric blobs
   for (let i = blobs.length - 1; i >= 0; i--) if (blobs[i].electric && blobs[i].life <= 0) blobs.splice(i, 1);
 
   updateParticles(dt); updateShapes(dt); updateRings(dt); updateTrail(dt); updateCascade(dt);
   if (bgFlash > 0) bgFlash = Math.max(0, bgFlash - dt * 0.3);
 
-  // fluid layer
+  // fluid layer (pastel on soft white)
   fctx.save(); fctx.setTransform(FLUID_SCALE, 0, 0, FLUID_SCALE, 0, 0);
   fctx.clearRect(0, 0, W, H);
-  fctx.fillStyle = "#06060c"; fctx.fillRect(0, 0, W, H);
+  fctx.fillStyle = "#fbfbf9"; fctx.fillRect(0, 0, W, H);
   const sorted = blobs.slice().sort((a, b) => b.baseRadius - a.baseRadius);
   for (const b of sorted) b.draw(time);
   fctx.restore();
 
   // fx layer
   xctx.clearRect(0, 0, W, H);
-  if (bgFlash > 0) { xctx.save(); xctx.globalAlpha = bgFlash; xctx.fillStyle = "#fff"; xctx.fillRect(0, 0, W, H); xctx.restore(); }
+  if (bgFlash > 0) { xctx.save(); xctx.globalAlpha = bgFlash; xctx.fillStyle = "#b9c6ef"; xctx.fillRect(0, 0, W, H); xctx.restore(); }
   drawParticles(); drawRings(); drawShapes();
-  drawTrail(blobs.length ? blobs[0].hue : 200);
+  drawTrail(blobs.length ? blobs[0].hue : 210);
 
   requestAnimationFrame(frame);
 }
