@@ -166,7 +166,7 @@ const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 const Audio = (function () {
   let ac = null, master = null, limiter = null, reverb = null, revGain = null;
   let started = false, muted = false;
-  const targetGain = 0.5;
+  const targetGain = 0.55;
 
   // C major pentatonic across octaves — warm, consonant, no harsh intervals
   const N = {
@@ -252,6 +252,7 @@ const Audio = (function () {
   }
   // warm sine bass + sub
   function bass(t, freq) {
+    // square + sub sine an octave below for depth
     const o = ac.createOscillator(), g = ac.createGain();
     o.type = "sine"; o.frequency.value = freq;
     g.gain.setValueAtTime(0.0001, t);
@@ -285,6 +286,7 @@ const Audio = (function () {
     });
   }
 
+  // ---- instant reactions (played the moment they're called) --------------
   const reactions = {
     touch() { const t = now(); bell(t, pick([N.C5, N.E5, N.G5]), 0.18); },
     create() { const t = now(); [N.C4, N.E4, N.G4, N.C5].forEach((f, i) => bell(t + i * 0.08, f, 0.16)); },
