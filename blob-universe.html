@@ -69,7 +69,7 @@ const OVS = 48, FLUID_SCALE = 0.55;
 const fx = document.getElementById("fx");
 const xctx = fx.getContext("2d");
 const planeEls = [document.getElementById("f0"), document.getElementById("f1"), document.getElementById("f2")];
-const planes = planeEls.map((el, i) => ({ el, ctx: el.getContext("2d"), parallax:[8,16,26][i], sizeMul:[0.68,0.92,1.14][i], alpha:[0.52,0.8,0.96][i] }));
+const planes = planeEls.map((el, i) => ({ el, ctx: el.getContext("2d"), parallax:[8,16,26][i], sizeMul:[0.68,0.92,1.14][i], alpha:[0.52,0.8,0.96][i], eyeBlur:[15,8.5,4.5][i], ox:0, oy:0 }));
 let W=0, H=0, DPR=1;
 function resize(){ DPR=Math.min(window.devicePixelRatio||1,2); W=window.innerWidth; H=window.innerHeight; for(const p of planes){ p.el.width=Math.max(1,Math.floor((W+OVS*2)*FLUID_SCALE)); p.el.height=Math.max(1,Math.floor((H+OVS*2)*FLUID_SCALE)); } fx.width=Math.floor(W*DPR); fx.height=Math.floor(H*DPR); fx.style.width=W+"px"; fx.style.height=H+"px"; xctx.setTransform(DPR,0,0,DPR,0,0); xctx.imageSmoothingEnabled=false; }
 window.addEventListener("resize", resize);
@@ -219,6 +219,7 @@ class Blob {
     this.magnetTarget=null; this.grabbed=false; this.grabX=0; this.grabY=0;
     this.age=0; this.lifespan=rand(34,70); this.dying=false; this.dead=false; this.deathT=0; this.deathDur=1.8;
     this.blinkTimer=rand(1,5); this.blinkT=0; this.lookx=0; this.looky=0; this.scared=0;
+    this.irisHue=rand(0,360); // each creature has its own colourful iris
     // shape morphing
     this.shapeFrom="blob"; this.shapeTo=pick(this.char.shapes); this.morphT=1; this.morphDur=1.6; this.shapeRot=rand(0,TAU); this.shapeTimer=rand(3,8);
     // growths / excroissances
@@ -285,28 +286,46 @@ class Blob {
     const sp=pts.map(p=>({x:cx+(p.x-cx)*plane.sizeMul,y:cy+(p.y-cy)*plane.sizeMul}));
     ctx.moveTo((sp[n-1].x+sp[0].x)/2,(sp[n-1].y+sp[0].y)/2);
     for(let i=0;i<n;i++){const c=sp[i],nx=sp[(i+1)%n]; ctx.quadraticCurveTo(c.x,c.y,(c.x+nx.x)/2,(c.y+nx.y)/2);} ctx.closePath(); ctx.fill();
-    // soft face on the same (blurred) layer — part of the look
-    if(r>13){ this._face(ctx,cx,cy,r,lifeAlpha,deathP); }
     ctx.restore();
   }
-  _face(ctx,cx,cy,r,lifeAlpha,deathP){
-    let open=this.char.open, smile=this.char.smile;
-    if(this.blush>0.35){ smile=1; open=0.7; }
-    if(this.excite>0.6){ open=Math.max(open,1.05); }
-    if(this.scared>0){ open=1.15; smile=-0.3; }
-    if(this.dying){ open*=(1-deathP*0.8); smile=lerp(smile,-0.2,deathP); } // sleepy, sad as it fades
-    const blink=this.blinkT>0?0.14:1; open*=blink;
-    const es=r*0.30, eyY=cy-r*0.10, er=clamp(r*0.16,3,24);
-    const faceCol="rgba(60,52,78,"+(0.5*lifeAlpha)+")";
-    ctx.fillStyle=faceCol; ctx.strokeStyle=faceCol; ctx.lineCap="round";
-    for(const sgn of [-1,1]){ const ex=cx+sgn*es+this.lookx*er*0.3, ey=eyY+this.looky*er*0.3;
-      ctx.beginPath(); ctx.ellipse(ex,ey,er*0.72,Math.max(1,er*open),0,0,TAU); ctx.fill();
+}
+
+// face drawn on the sharp layer with its OWN soft blur (half of the plane's),
+// so the features read clearly while staying dreamy. White sclera, colour iris,
+// pupil + highlight, and little cheek blush.
+function drawFace(b){
+  if(b.dead)return;
+  const p=planes[b.layer]; const r=b.radius*p.sizeMul; if(r<13)return;
+  const cx=b.x+p.ox, cy=b.y+p.oy;
+  const birth=clamp(b.age/0.6,0,1), deathP=b.dying?clamp(b.deathT/b.deathDur,0,1):0;
+  const alpha=p.alpha*birth*(1-deathP); if(alpha<=0.03)return;
+  let open=b.char.open, smile=b.char.smile;
+  if(b.blush>0.35){ smile=1; open=0.72; }
+  if(b.excite>0.6)open=Math.max(open,1.05);
+  if(b.scared>0){ open=1.15; smile=-0.3; }
+  if(b.dying){ open*=(1-deathP*0.8); smile=lerp(smile,-0.2,deathP); }
+  const blink=b.blinkT>0?0.12:1; open*=blink;
+  xctx.save();
+  try{ xctx.filter="blur("+p.eyeBlur+"px)"; }catch(e){}
+  const es=r*0.32, eyY=cy-r*0.08, er=clamp(r*0.22,4,30);
+  const irisSat = b.dying ? Math.round(70*(1-deathP)) : 70;
+  for(const sgn of [-1,1]){ const ex=cx+sgn*es;
+    xctx.globalAlpha=alpha; xctx.fillStyle="#ffffff"; xctx.beginPath(); xctx.ellipse(ex,eyY,er,Math.max(1.5,er*open),0,0,TAU); xctx.fill();
+    if(blink>0.5){
+      const ix=ex+b.lookx*er*0.34, iy=eyY+b.looky*er*0.34*open;
+      xctx.fillStyle="hsl("+b.irisHue+","+irisSat+"%,52%)"; xctx.beginPath(); xctx.arc(ix,iy,er*0.5,0,TAU); xctx.fill();
+      xctx.fillStyle="#2a2733"; xctx.beginPath(); xctx.arc(ix,iy,er*0.26,0,TAU); xctx.fill();
+      xctx.fillStyle="rgba(255,255,255,0.9)"; xctx.beginPath(); xctx.arc(ix-er*0.17,iy-er*0.17,er*0.12,0,TAU); xctx.fill();
     }
-    // mouth
-    const my=cy+r*0.26, mw=r*0.3, cur=smile*r*0.16;
-    ctx.lineWidth=Math.max(2,r*0.07);
-    ctx.beginPath(); ctx.moveTo(cx-mw,my); ctx.quadraticCurveTo(cx,my+cur*2,cx+mw,my); ctx.stroke();
   }
+  // cheek blush (always a little, more when caressed)
+  xctx.globalAlpha=alpha*(0.22+b.blush*0.6); xctx.fillStyle="hsl(345,78%,74%)";
+  for(const sgn of [-1,1]){ xctx.beginPath(); xctx.ellipse(cx+sgn*r*0.46, cy+r*0.14, r*0.17, r*0.1, 0, 0, TAU); xctx.fill(); }
+  // mouth
+  xctx.globalAlpha=alpha; const my=cy+r*0.3, mw=r*0.26, cur=smile*r*0.16;
+  xctx.strokeStyle="rgba(70,55,80,0.8)"; xctx.lineWidth=Math.max(2,r*0.07); xctx.lineCap="round";
+  xctx.beginPath(); xctx.moveTo(cx-mw,my); xctx.quadraticCurveTo(cx,my+cur*2,cx+mw,my); xctx.stroke();
+  xctx.restore();
 }
 
 function applyFluidForces(){ for(let i=0;i<blobs.length;i++){ for(let j=i+1;j<blobs.length;j++){ const a=blobs[i],b=blobs[j]; let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||0.001; const ux=dx/d,uy=dy/d,sumR=a.baseRadius+b.baseRadius; const coh=sumR+130; if(d<coh){const f=4.5*(1-d/coh); a.ax+=ux*f;a.ay+=uy*f;b.ax-=ux*f;b.ay-=uy*f;} const sep=sumR*0.72; if(d<sep){const f=30*(1-d/sep); a.ax-=ux*f;a.ay-=uy*f;b.ax+=ux*f;b.ay+=uy*f;} } } }
@@ -431,11 +450,12 @@ function frame(nowMs){
   for(const b of blobs){ b.integrate(dt,time); b.animate(dt,time); }
   lifeEvents(dt); updateParticles(dt);
   if(bgFlash>0)bgFlash=Math.max(0,bgFlash-dt*0.3);
-  for(const p of planes){ p.el.style.transform="translate("+(-Sway.x*p.parallax)+"px,"+(-Sway.y*p.parallax)+"px)"; }
+  for(const p of planes){ p.ox=-Sway.x*p.parallax; p.oy=-Sway.y*p.parallax; p.el.style.transform="translate("+p.ox+"px,"+p.oy+"px)"; }
   for(let li=0;li<planes.length;li++){ const p=planes[li],ctx=p.ctx; ctx.setTransform(FLUID_SCALE,0,0,FLUID_SCALE,OVS*FLUID_SCALE,OVS*FLUID_SCALE); ctx.clearRect(-OVS,-OVS,W+OVS*2,H+OVS*2); const list=blobs.filter(b=>b.layer===li).sort((a,b)=>b.baseRadius-a.baseRadius); for(const b of list)b.draw(ctx,time,p); }
   xctx.clearRect(0,0,W,H);
   if(bgFlash>0){xctx.save();xctx.globalAlpha=bgFlash;xctx.fillStyle="#b9c6ef";xctx.fillRect(0,0,W,H);xctx.restore();}
   drawParticles();
+  for(let li=0;li<planes.length;li++) for(const b of blobs) if(b.layer===li) drawFace(b);
   requestAnimationFrame(frame);
 }
 spawnInitial();
