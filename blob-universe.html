@@ -308,6 +308,27 @@ class Blob {
     ctx.beginPath(); ctx.moveTo(cx-mw,my); ctx.quadraticCurveTo(cx,my+cur*2,cx+mw,my); ctx.stroke();
   }
 }
+
+// eyes drawn on the sharp fx layer (aligned to the body's parallax-shifted plane)
+function drawEyes(b){
+  const po=planes[b.layer]; const r=b.radius*po.sizeMul; if(r<16)return;
+  const ex=b.x+po.ox, ey=b.y+po.oy;
+  const es=r*0.30, eyY=ey-r*0.08, er=clamp(r*0.17,3.5,22);
+  let open=0.85, curve=0;
+  switch(b.char.eye){ case "sleepy":open=0.4;break; case "half":open=0.6;break; case "wide":open=1.05;break; case "happy":open=0.8;curve=0.6;break; }
+  if(b.blush>0.35){ curve=0.9; open=0.65; }
+  if(b.excite>0.6){ open=Math.max(open,1.1); curve=Math.min(curve,0.2); }
+  if(b.scared>0){ open=1.2; curve=0; }
+  const blink=b.blinkT>0?0.12:1; open*=blink;
+  const po2=er*0.42;
+  for(const sgn of [-1,1]){ const cxEye=ex+sgn*es;
+    if(curve>0.5&&blink>0.5){ xctx.strokeStyle="#3a3a4a"; xctx.lineWidth=Math.max(2,er*0.32); xctx.lineCap="round"; xctx.beginPath(); xctx.arc(cxEye,eyY+er*0.25,er*0.7,Math.PI*1.15,Math.PI*1.85); xctx.stroke(); }
+    else { xctx.fillStyle="rgba(255,255,255,0.96)"; xctx.beginPath(); xctx.ellipse(cxEye,eyY,er,Math.max(1,er*open),0,0,TAU); xctx.fill(); xctx.fillStyle="#33333f"; xctx.beginPath(); xctx.arc(cxEye+b.lookx*po2,eyY+b.looky*po2*open,er*0.5,0,TAU); xctx.fill(); }
+  }
+  if(b.blush>0.45){ xctx.strokeStyle="#c76a8a"; xctx.lineWidth=Math.max(2,er*0.3); xctx.lineCap="round"; xctx.beginPath(); xctx.arc(ex,eyY+r*0.32,r*0.18,0.12*Math.PI,0.88*Math.PI); xctx.stroke(); }
+  else if(b.scared>0){ xctx.fillStyle="#5a4a5a"; xctx.beginPath(); xctx.ellipse(ex,eyY+r*0.34,r*0.08,r*0.11,0,0,TAU); xctx.fill(); }
+}
+
 function applyFluidForces(){ for(let i=0;i<blobs.length;i++){ for(let j=i+1;j<blobs.length;j++){ const a=blobs[i],b=blobs[j]; let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||0.001; const ux=dx/d,uy=dy/d,sumR=a.baseRadius+b.baseRadius; const coh=sumR+130; if(d<coh){const f=4.5*(1-d/coh); a.ax+=ux*f;a.ay+=uy*f;b.ax-=ux*f;b.ay-=uy*f;} const sep=sumR*0.72; if(d<sep){const f=30*(1-d/sep); a.ax-=ux*f;a.ay-=uy*f;b.ax+=ux*f;b.ay+=uy*f;} } } }
 
 // ============================================================================
@@ -435,6 +456,7 @@ function frame(nowMs){
   xctx.clearRect(0,0,W,H);
   if(bgFlash>0){xctx.save();xctx.globalAlpha=bgFlash;xctx.fillStyle="#b9c6ef";xctx.fillRect(0,0,W,H);xctx.restore();}
   drawParticles();
+  for(const b of blobs) drawEyes(b);
   requestAnimationFrame(frame);
 }
 spawnInitial();
