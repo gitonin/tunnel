@@ -13,7 +13,9 @@
   #f0 { filter: blur(30px) saturate(1.10); -webkit-filter: blur(30px) saturate(1.10); z-index: 1; }
   #f1 { filter: blur(17px) saturate(1.08); -webkit-filter: blur(17px) saturate(1.08); z-index: 2; }
   #f2 { filter: blur(9px)  saturate(1.06); -webkit-filter: blur(9px)  saturate(1.06); z-index: 3; }
-  #fx { position: fixed; inset: 0; display: block; z-index: 4; }
+  /* faces get a gentle CSS blur (works where canvas ctx.filter doesn't) */
+  #face { position: fixed; inset: 0; display: block; z-index: 4; filter: blur(3px); -webkit-filter: blur(3px); }
+  #fx { position: fixed; inset: 0; display: block; z-index: 5; }
   #hud { position: fixed; top: 8px; right: 8px; font-family: "Courier New", Courier, monospace; font-size: 12px; line-height: 1.5; color: #5c6b85; background: rgba(255,255,255,0.6); border: 1px solid rgba(130,150,190,0.3); border-radius: 8px; padding: 6px 9px; z-index: 10; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
   #hud .row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
   #beatDot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ccd3df; transition: background .12s; }
@@ -37,6 +39,7 @@
 <canvas id="f0" class="plane"></canvas>
 <canvas id="f1" class="plane"></canvas>
 <canvas id="f2" class="plane"></canvas>
+<canvas id="face"></canvas>
 <canvas id="fx"></canvas>
 <div id="hud">
   <div class="row"><span id="bpmLabel">BPM 76</span><span id="beatDot"></span></div>
@@ -68,10 +71,12 @@
 const OVS = 48, FLUID_SCALE = 0.55;
 const fx = document.getElementById("fx");
 const xctx = fx.getContext("2d");
+const faceC = document.getElementById("face");
+const fctxFace = faceC.getContext("2d");
 const planeEls = [document.getElementById("f0"), document.getElementById("f1"), document.getElementById("f2")];
 const planes = planeEls.map((el, i) => ({ el, ctx: el.getContext("2d"), parallax:[8,16,26][i], sizeMul:[0.68,0.92,1.14][i], alpha:[0.52,0.8,0.96][i], eyeBlur:[15,8.5,4.5][i], ox:0, oy:0 }));
 let W=0, H=0, DPR=1;
-function resize(){ DPR=Math.min(window.devicePixelRatio||1,2); W=window.innerWidth; H=window.innerHeight; for(const p of planes){ p.el.width=Math.max(1,Math.floor((W+OVS*2)*FLUID_SCALE)); p.el.height=Math.max(1,Math.floor((H+OVS*2)*FLUID_SCALE)); } fx.width=Math.floor(W*DPR); fx.height=Math.floor(H*DPR); fx.style.width=W+"px"; fx.style.height=H+"px"; xctx.setTransform(DPR,0,0,DPR,0,0); xctx.imageSmoothingEnabled=false; }
+function resize(){ DPR=Math.min(window.devicePixelRatio||1,2); W=window.innerWidth; H=window.innerHeight; for(const p of planes){ p.el.width=Math.max(1,Math.floor((W+OVS*2)*FLUID_SCALE)); p.el.height=Math.max(1,Math.floor((H+OVS*2)*FLUID_SCALE)); } fx.width=Math.floor(W*DPR); fx.height=Math.floor(H*DPR); fx.style.width=W+"px"; fx.style.height=H+"px"; xctx.setTransform(DPR,0,0,DPR,0,0); xctx.imageSmoothingEnabled=false; faceC.width=Math.floor(W*DPR); faceC.height=Math.floor(H*DPR); faceC.style.width=W+"px"; faceC.style.height=H+"px"; fctxFace.setTransform(DPR,0,0,DPR,0,0); }
 window.addEventListener("resize", resize);
 window.addEventListener("orientationchange", ()=>setTimeout(resize,120));
 resize();
@@ -305,27 +310,27 @@ function drawFace(b){
   if(b.scared>0){ open=1.15; smile=-0.3; }
   if(b.dying){ open*=(1-deathP*0.8); smile=lerp(smile,-0.2,deathP); }
   const blink=b.blinkT>0?0.12:1; open*=blink;
-  xctx.save();
-  try{ xctx.filter="blur("+p.eyeBlur+"px)"; }catch(e){}
+  const g=fctxFace;
+  g.save();
   const es=r*0.32, eyY=cy-r*0.08, er=clamp(r*0.22,4,30);
   const irisSat = b.dying ? Math.round(70*(1-deathP)) : 70;
   for(const sgn of [-1,1]){ const ex=cx+sgn*es;
-    xctx.globalAlpha=alpha; xctx.fillStyle="#ffffff"; xctx.beginPath(); xctx.ellipse(ex,eyY,er,Math.max(1.5,er*open),0,0,TAU); xctx.fill();
+    g.globalAlpha=alpha; g.fillStyle="#ffffff"; g.beginPath(); g.ellipse(ex,eyY,er,Math.max(1.5,er*open),0,0,TAU); g.fill();
     if(blink>0.5){
       const ix=ex+b.lookx*er*0.34, iy=eyY+b.looky*er*0.34*open;
-      xctx.fillStyle="hsl("+b.irisHue+","+irisSat+"%,52%)"; xctx.beginPath(); xctx.arc(ix,iy,er*0.5,0,TAU); xctx.fill();
-      xctx.fillStyle="#2a2733"; xctx.beginPath(); xctx.arc(ix,iy,er*0.26,0,TAU); xctx.fill();
-      xctx.fillStyle="rgba(255,255,255,0.9)"; xctx.beginPath(); xctx.arc(ix-er*0.17,iy-er*0.17,er*0.12,0,TAU); xctx.fill();
+      g.fillStyle="hsl("+b.irisHue+","+irisSat+"%,52%)"; g.beginPath(); g.arc(ix,iy,er*0.5,0,TAU); g.fill();
+      g.fillStyle="#2a2733"; g.beginPath(); g.arc(ix,iy,er*0.26,0,TAU); g.fill();
+      g.fillStyle="rgba(255,255,255,0.9)"; g.beginPath(); g.arc(ix-er*0.17,iy-er*0.17,er*0.12,0,TAU); g.fill();
     }
   }
   // cheek blush (always a little, more when caressed)
-  xctx.globalAlpha=alpha*(0.22+b.blush*0.6); xctx.fillStyle="hsl(345,78%,74%)";
-  for(const sgn of [-1,1]){ xctx.beginPath(); xctx.ellipse(cx+sgn*r*0.46, cy+r*0.14, r*0.17, r*0.1, 0, 0, TAU); xctx.fill(); }
+  g.globalAlpha=alpha*(0.22+b.blush*0.6); g.fillStyle="hsl(345,78%,74%)";
+  for(const sgn of [-1,1]){ g.beginPath(); g.ellipse(cx+sgn*r*0.46, cy+r*0.14, r*0.17, r*0.1, 0, 0, TAU); g.fill(); }
   // mouth
-  xctx.globalAlpha=alpha; const my=cy+r*0.3, mw=r*0.26, cur=smile*r*0.16;
-  xctx.strokeStyle="rgba(70,55,80,0.8)"; xctx.lineWidth=Math.max(2,r*0.07); xctx.lineCap="round";
-  xctx.beginPath(); xctx.moveTo(cx-mw,my); xctx.quadraticCurveTo(cx,my+cur*2,cx+mw,my); xctx.stroke();
-  xctx.restore();
+  g.globalAlpha=alpha; const my=cy+r*0.3, mw=r*0.26, cur=smile*r*0.16;
+  g.strokeStyle="rgba(70,55,80,0.8)"; g.lineWidth=Math.max(2,r*0.07); g.lineCap="round";
+  g.beginPath(); g.moveTo(cx-mw,my); g.quadraticCurveTo(cx,my+cur*2,cx+mw,my); g.stroke();
+  g.restore();
 }
 
 function applyFluidForces(){ for(let i=0;i<blobs.length;i++){ for(let j=i+1;j<blobs.length;j++){ const a=blobs[i],b=blobs[j]; let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||0.001; const ux=dx/d,uy=dy/d,sumR=a.baseRadius+b.baseRadius; const coh=sumR+130; if(d<coh){const f=4.5*(1-d/coh); a.ax+=ux*f;a.ay+=uy*f;b.ax-=ux*f;b.ay-=uy*f;} const sep=sumR*0.72; if(d<sep){const f=30*(1-d/sep); a.ax-=ux*f;a.ay-=uy*f;b.ax+=ux*f;b.ay+=uy*f;} } } }
@@ -452,10 +457,11 @@ function frame(nowMs){
   if(bgFlash>0)bgFlash=Math.max(0,bgFlash-dt*0.3);
   for(const p of planes){ p.ox=-Sway.x*p.parallax; p.oy=-Sway.y*p.parallax; p.el.style.transform="translate("+p.ox+"px,"+p.oy+"px)"; }
   for(let li=0;li<planes.length;li++){ const p=planes[li],ctx=p.ctx; ctx.setTransform(FLUID_SCALE,0,0,FLUID_SCALE,OVS*FLUID_SCALE,OVS*FLUID_SCALE); ctx.clearRect(-OVS,-OVS,W+OVS*2,H+OVS*2); const list=blobs.filter(b=>b.layer===li).sort((a,b)=>b.baseRadius-a.baseRadius); for(const b of list)b.draw(ctx,time,p); }
+  fctxFace.clearRect(0,0,W,H);
+  for(let li=0;li<planes.length;li++) for(const b of blobs) if(b.layer===li) drawFace(b);
   xctx.clearRect(0,0,W,H);
   if(bgFlash>0){xctx.save();xctx.globalAlpha=bgFlash;xctx.fillStyle="#b9c6ef";xctx.fillRect(0,0,W,H);xctx.restore();}
   drawParticles();
-  for(let li=0;li<planes.length;li++) for(const b of blobs) if(b.layer===li) drawFace(b);
   requestAnimationFrame(frame);
 }
 spawnInitial();
