@@ -349,10 +349,6 @@ const Gesture=(function(){
       else { const nb=hatch(tx,ty,null,randInt(0,2)); if(nb){ burst(tx,ty,nb.hue,12); Note.bell(2,0.16); updateHUD(); } }
     }
   }
-  function windsAround(c){ let total=0; for(let i=1;i<path.length;i++){ let da=Math.atan2(path[i].y-c.y,path[i].x-c.x)-Math.atan2(path[i-1].y-c.y,path[i-1].x-c.x); while(da>Math.PI)da-=TAU; while(da<-Math.PI)da+=TAU; total+=da; } return Math.abs(total)>Math.PI*1.5; }
-  function pointInPath(px,py){ let inside=false; for(let i=0,j=path.length-1;i<path.length;j=i++){ const xi=path[i].x,yi=path[i].y,xj=path[j].x,yj=path[j].y; if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/((yj-yi)||1e-9)+xi))inside=!inside; } return inside; }
-  function isCircular(){ if(!isClosed())return false; const c=centroidOf(path); let mean=0; const ds=[]; for(const p of path){const d=dist(p.x,p.y,c.x,c.y);ds.push(d);mean+=d;} mean/=ds.length; if(mean<20)return false; let v=0; for(const d of ds)v+=(d-mean)*(d-mean); return Math.sqrt(v/ds.length)/mean<0.3; }
-  function findCorners(){ const simp=[]; const minStep=14; let prev=path[0]; simp.push(prev); for(const p of path)if(dist(p.x,p.y,prev.x,prev.y)>=minStep){simp.push(p);prev=p;} if(simp.length<4)return[]; const cand=[]; for(let i=1;i<simp.length-1;i++){const a=simp[i-1],b=simp[i],cc=simp[i+1]; let turn=Math.abs(Math.atan2(cc.y-b.y,cc.x-b.x)-Math.atan2(b.y-a.y,b.x-a.x)); while(turn>Math.PI)turn=Math.abs(turn-TAU); cand.push({i,turn,x:b.x,y:b.y});} cand.sort((p,q)=>q.turn-p.turn); const chosen=[]; for(const c of cand){if(c.turn<0.7)break; let near=false; for(const ch of chosen)if(Math.abs(ch.i-c.i)<3){near=true;break;} if(!near)chosen.push(c); if(chosen.length>=4)break;} chosen.sort((p,q)=>p.i-q.i); return chosen.map(c=>({x:c.x,y:c.y})); }
   return { onStart, onMove, onEnd };
 })();
 
